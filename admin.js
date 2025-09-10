@@ -1,7 +1,8 @@
+const { createClient } = supabase;
 const supabaseUrl = 'https://ucjnlylxjaezfgbmckkg.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjam5seWx4amFlemZnYm1ja2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDIyOTksImV4cCI6MjA3MzExODI5OX0.N3QoSWDDAkEQ811oOV97aalQTuH25i2bYHHZ0TQt2q0';
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
@@ -11,10 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const productForm = document.getElementById('product-form');
     const productList = document.getElementById('product-list');
 
-    // Carga los productos al iniciar
     fetchProducts();
 
-    // Maneja el login
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const username = document.getElementById('username').value;
@@ -29,14 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Maneja el cierre de sesión
     logoutBtn.addEventListener('click', () => {
         loginContainer.style.display = 'block';
         adminPanel.style.display = 'none';
         alert('Sesión cerrada');
     });
 
-    // Maneja la subida del formulario
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -53,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const imageUrls = [];
 
-            // Sube cada imagen a Supabase Storage
             for (const image of images) {
                 const filePath = `product_images/${Date.now()}-${image.name}`;
                 const { data, error } = await supabase.storage
@@ -64,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(error.message);
                 }
 
-                // Obtiene la URL pública de la imagen
                 const { data: publicUrlData } = supabase.storage
                     .from('products')
                     .getPublicUrl(filePath);
@@ -74,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Inserta el producto en la base de datos con las URLs
             const { data, error } = await supabase
                 .from('Products')
                 .insert([{
@@ -99,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Muestra todos los productos
     async function fetchProducts() {
         const { data: products, error } = await supabase
             .from('Products')
@@ -125,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Maneja la eliminación y el cambio de stock
     productList.addEventListener('click', async (e) => {
         const id = e.target.dataset.id;
         if (e.target.classList.contains('delete-btn')) {
