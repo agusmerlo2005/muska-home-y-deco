@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const { data, error } = await supabase
-                .from('Products')
+                .from('products')
                 .insert([{
                     name: name,
                     price: parseInt(price),
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchProducts() {
         const { data: products, error } = await supabase
-            .from('Products')
+            .from('products')
             .select('*');
 
         if (error) {
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('delete-btn')) {
             if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
                 const { error } = await supabase
-                    .from('Products')
+                    .from('products')
                     .delete()
                     .eq('id', id);
 
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('toggle-stock-btn')) {
             const currentStock = e.target.dataset.stock === 'true';
             const { error } = await supabase
-                .from('Products')
+                .from('products')
                 .update({ stock: !currentStock })
                 .eq('id', id);
 

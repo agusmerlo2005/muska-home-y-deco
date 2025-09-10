@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchProducts() {
         try {
             const { data: products, error } = await supabase
-                .from('Products')
+                .from('products')
                 .select('*');
 
             if (error) {
