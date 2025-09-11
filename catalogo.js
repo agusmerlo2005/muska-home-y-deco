@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
                 
-                // Determina el texto del stock y su clase CSS
                 const stockText = product.stock ? 'En stock' : 'Sin stock';
                 const stockClass = product.stock ? 'in-stock' : 'out-of-stock';
 
@@ -31,9 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
                     <p class="product-description">${product.description}</p>
                     <p class="product-stock ${stockClass}">Estado: ${stockText}</p>
-                    <button class="buy-button" ${product.stock ? '' : 'disabled'}>
-                        ${product.stock ? 'Comprar' : 'Sin Stock'}
-                    </button>
                 `;
                 productGrid.appendChild(productCard);
             });
