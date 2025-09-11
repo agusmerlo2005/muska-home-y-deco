@@ -1,6 +1,5 @@
 const supabaseUrl = 'https://ucjnlylxjaezfgbmckkg.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjam5seWx4amFlemZnYm1ja2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDIyOTksImV4cCI6MjA3MzExODI5OX0.N3QoSWDDAkEQ811oOV97aalQTuH25i2bYHHZ0TQt2q0';
-
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     const productForm = document.getElementById('product-form');
     const productList = document.getElementById('product-list');
+
+    let editingProductId = null;
 
     fetchProducts();
 
@@ -42,54 +43,90 @@ document.addEventListener('DOMContentLoaded', () => {
         const images = document.getElementById('product-image').files;
         const inStock = document.getElementById('stock-status').checked;
 
-        if (!images || images.length === 0) {
-            alert('Debes subir al menos una imagen.');
-            return;
-        }
-
-        try {
-            const imageUrls = [];
-
-            for (const image of images) {
-                const filePath = `product_images/${Date.now()}-${image.name}`;
-                const { data, error } = await supabase.storage
-                    .from('products')
-                    .upload(filePath, image);
-
-                if (error) {
-                    throw new Error(error.message);
-                }
-
-                const { data: publicUrlData } = supabase.storage
-                    .from('products')
-                    .getPublicUrl(filePath);
-
-                if (publicUrlData) {
-                    imageUrls.push(publicUrlData.publicUrl);
-                }
-            }
-
-            const { data, error } = await supabase
-                .from('products')
-                .insert([{
+        if (editingProductId) {
+            try {
+                const updateData = {
                     name: name,
                     price: parseInt(price),
                     description: description,
-                    image_url: imageUrls,
                     stock: inStock
-                }]);
+                };
 
-            if (error) {
-                throw new Error(error.message);
+                if (images && images.length > 0) {
+                    const imageUrls = [];
+                    for (const image of images) {
+                        const filePath = `product_images/${Date.now()}-${image.name}`;
+                        const { data, error } = await supabase.storage
+                            .from('products')
+                            .upload(filePath, image);
+
+                        if (error) throw new Error(error.message);
+
+                        const { data: publicUrlData } = supabase.storage
+                            .from('products')
+                            .getPublicUrl(filePath);
+
+                        if (publicUrlData) imageUrls.push(publicUrlData.publicUrl);
+                    }
+                    updateData.image_url = imageUrls;
+                }
+
+                const { data, error } = await supabase
+                    .from('products')
+                    .update(updateData)
+                    .eq('id', editingProductId);
+
+                if (error) throw new Error(error.message);
+
+                alert('Producto actualizado con éxito!');
+                editingProductId = null;
+                document.querySelector('#product-form button[type="submit"]').textContent = 'Agregar Producto';
+                productForm.reset();
+                fetchProducts();
+            } catch (error) {
+                console.error('Error al actualizar el producto:', error.message);
+                alert('Ocurrió un error al actualizar el producto: ' + error.message);
             }
 
-            alert('Producto agregado con éxito!');
-            productForm.reset();
-            fetchProducts();
+        } else {
+            if (!images || images.length === 0) {
+                alert('Debes subir al menos una imagen.');
+                return;
+            }
 
-        } catch (error) {
-            console.error('Error al agregar el producto:', error.message);
-            alert('Ocurrió un error al agregar el producto: ' + error.message);
+            try {
+                const imageUrls = [];
+                for (const image of images) {
+                    const filePath = `product_images/${Date.now()}-${image.name}`;
+                    const { data, error } = await supabase.storage
+                        .from('products')
+                        .upload(filePath, image);
+                    if (error) throw new Error(error.message);
+                    const { data: publicUrlData } = supabase.storage
+                        .from('products')
+                        .getPublicUrl(filePath);
+                    if (publicUrlData) imageUrls.push(publicUrlData.publicUrl);
+                }
+
+                const { data, error } = await supabase
+                    .from('products')
+                    .insert([{
+                        name: name,
+                        price: parseInt(price),
+                        description: description,
+                        image_url: imageUrls,
+                        stock: inStock
+                    }]);
+
+                if (error) throw new Error(error.message);
+
+                alert('Producto agregado con éxito!');
+                productForm.reset();
+                fetchProducts();
+            } catch (error) {
+                console.error('Error al agregar el producto:', error.message);
+                alert('Ocurrió un error al agregar el producto: ' + error.message);
+            }
         }
     });
 
@@ -112,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="product-name">${product.name}</p>
                 <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
                 <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">${product.stock ? 'Quitar stock' : 'Añadir stock'}</button>
+                <button class="edit-btn" data-id="${product.id}">Editar</button>
                 <button class="delete-btn" data-id="${product.id}">Eliminar</button>
             `;
             productList.appendChild(productDiv);
@@ -135,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
+        
         if (e.target.classList.contains('toggle-stock-btn')) {
             const currentStock = e.target.dataset.stock === 'true';
             const { error } = await supabase
@@ -149,6 +187,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Stock actualizado con éxito.');
                 fetchProducts();
             }
+        }
+
+        if (e.target.classList.contains('edit-btn')) {
+            const { data: product, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                console.error('Error al obtener el producto para editar:', error);
+                return;
+            }
+
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-price').value = product.price;
+            document.getElementById('product-description').value = product.description;
+            document.getElementById('stock-status').checked = product.stock;
+
+            editingProductId = product.id;
+            document.querySelector('#product-form button[type="submit"]').textContent = 'Guardar Cambios';
+            alert('Producto listo para editar. Haz los cambios y haz clic en "Guardar Cambios".');
         }
     });
 });
