@@ -80,75 +80,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]);
 
             if (error) {
-                    throw new Error(error.message);
-                }
-
-                alert('Producto agregado con éxito!');
-                productForm.reset();
-                fetchProducts();
-
-            } catch (error) {
-                console.error('Error al agregar el producto:', error.message);
-                alert('Ocurrió un error al agregar el producto: ' + error.message);
-            }
-        });
-
-        async function fetchProducts() {
-            const { data: products, error } = await supabase
-                .from('products')
-                .select('*');
-
-            if (error) {
-                console.error('Error al obtener productos:', error);
-                return;
+                throw new Error(error.message);
             }
 
-            productList.innerHTML = '';
-            products.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.classList.add('product-item');
-                productDiv.innerHTML = `
-                    <img src="${product.image_url[0]}" alt="${product.name}" class="product-image">
-                    <p class="product-name">${product.name}</p>
-                    <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
-                    <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">${product.stock ? 'Quitar stock' : 'Añadir stock'}</button>
-                    <button class="delete-btn" data-id="${product.id}">Eliminar</button>
-                `;
-                productList.appendChild(productDiv);
-            });
+            alert('Producto agregado con éxito!');
+            productForm.reset();
+            fetchProducts();
+
+        } catch (error) {
+            console.error('Error al agregar el producto:', error.message);
+            alert('Ocurrió un error al agregar el producto: ' + error.message);
+        }
+    });
+
+    async function fetchProducts() {
+        const { data: products, error } = await supabase
+            .from('products')
+            .select('*');
+
+        if (error) {
+            console.error('Error al obtener productos:', error);
+            return;
         }
 
-        productList.addEventListener('click', async (e) => {
-            const id = e.target.dataset.id;
-            if (e.target.classList.contains('delete-btn')) {
-                if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-                    const { error } = await supabase
-                        .from('products')
-                        .delete()
-                        .eq('id', id);
+        productList.innerHTML = '';
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('product-item');
+            productDiv.innerHTML = `
+                <img src="${product.image_url[0]}" alt="${product.name}" class="product-image">
+                <p class="product-name">${product.name}</p>
+                <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
+                <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">${product.stock ? 'Quitar stock' : 'Añadir stock'}</button>
+                <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+            `;
+            productList.appendChild(productDiv);
+        });
+    }
 
-                    if (error) {
-                        console.error('Error al eliminar:', error);
-                    } else {
-                        alert('Producto eliminado con éxito.');
-                        fetchProducts();
-                    }
-                }
-            }
-
-            if (e.target.classList.contains('toggle-stock-btn')) {
-                const currentStock = e.target.dataset.stock === 'true';
+    productList.addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        if (e.target.classList.contains('delete-btn')) {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
                 const { error } = await supabase
                     .from('products')
-                    .update({ stock: !currentStock })
+                    .delete()
                     .eq('id', id);
 
                 if (error) {
-                    console.error('Error al actualizar el stock:', error);
+                    console.error('Error al eliminar:', error);
                 } else {
-                    alert('Stock actualizado con éxito.');
+                    alert('Producto eliminado con éxito.');
                     fetchProducts();
                 }
             }
-        });
+        }
+
+        if (e.target.classList.contains('toggle-stock-btn')) {
+            const currentStock = e.target.dataset.stock === 'true';
+            const { error } = await supabase
+                .from('products')
+                .update({ stock: !currentStock })
+                .eq('id', id);
+
+            if (error) {
+                console.error('Error al actualizar el stock:', error);
+            } else {
+                alert('Stock actualizado con éxito.');
+                fetchProducts();
+            }
+        }
     });
+});
