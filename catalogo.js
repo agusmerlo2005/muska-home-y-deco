@@ -23,8 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 productCard.innerHTML = `
                     <img src="${product.image_url[0]}" alt="${product.name}" class="product-image">
                     <h3 class="product-name">${product.name}</h3>
-                    <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
-                    <button class="buy-button">Comprar</button>
+                    ${product.stock ? `<p class="product-price">$${product.price.toLocaleString('es-AR')}</p>` : `<p class="product-price out-of-stock">Sin Stock</p>`}
+                    <button class="buy-button" ${product.stock ? '' : 'disabled'}>
+                        ${product.stock ? 'Comprar' : 'Sin Stock'}
+                    </button>
                 `;
                 productGrid.appendChild(productCard);
             });
