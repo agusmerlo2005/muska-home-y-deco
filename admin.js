@@ -142,17 +142,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         productList.innerHTML = '';
         products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.classList.add('product-item');
-            productDiv.innerHTML = `
-                <img src="${product.image_url[0]}" alt="${product.name}" class="product-image">
-                <p class="product-name">${product.name}</p>
-                <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
-                <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">${product.stock ? 'Quitar stock' : 'Añadir stock'}</button>
-                <button class="edit-btn" data-id="${product.id}">Editar</button>
-                <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+            const productRow = document.createElement('tr');
+            const stockText = product.stock ? 'En stock' : 'Sin stock';
+
+            productRow.innerHTML = `
+                <td>${product.name}</td>
+                <td>$${product.price.toLocaleString('es-AR')}</td>
+                <td>${product.description}</td>
+                <td>${stockText}</td>
+                <td>
+                    <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">
+                        ${product.stock ? 'Quitar stock' : 'Añadir stock'}
+                    </button>
+                    <button class="edit-btn" data-id="${product.id}">Editar</button>
+                    <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+                </td>
             `;
-            productList.appendChild(productDiv);
+            productList.appendChild(productRow);
         });
     }
 
