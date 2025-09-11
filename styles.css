@@ -406,3 +406,26 @@ body {
     height: auto;
     border-radius: 5px;
 }
+
+/* --- Estilos del botón de contacto --- */
+.contact-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.contact-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #e6b8a2;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.contact-button:hover {
+    background-color: #d1a896;
+    transform: translateY(-2px);
+}
+
