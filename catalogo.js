@@ -20,10 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
+                
+                // Determina el texto del stock y su clase CSS
+                const stockText = product.stock ? 'En stock' : 'Sin stock';
+                const stockClass = product.stock ? 'in-stock' : 'out-of-stock';
+
                 productCard.innerHTML = `
                     <img src="${product.image_url[0]}" alt="${product.name}" class="product-image">
                     <h3 class="product-name">${product.name}</h3>
-                    ${product.stock ? `<p class="product-price">$${product.price.toLocaleString('es-AR')}</p>` : `<p class="product-price out-of-stock">Sin Stock</p>`}
+                    <p class="product-price">$${product.price.toLocaleString('es-AR')}</p>
+                    <p class="product-description">${product.description}</p>
+                    <p class="product-stock ${stockClass}">Estado: ${stockText}</p>
                     <button class="buy-button" ${product.stock ? '' : 'disabled'}>
                         ${product.stock ? 'Comprar' : 'Sin Stock'}
                     </button>
