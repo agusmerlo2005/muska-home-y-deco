@@ -76,6 +76,7 @@ body {
 /* --- ESTILOS DE LA SECCIÓN PRINCIPAL (HERO) --- */
 .main-content {
     display: flex;
+    flex-direction: column; /* Agregado para apilar las secciones verticalmente */
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 80px);
@@ -428,4 +429,3 @@ body {
     background-color: #d1a896;
     transform: translateY(-2px);
 }
-
