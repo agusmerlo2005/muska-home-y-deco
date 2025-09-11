@@ -1,48 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo | MUSKA</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="catalogo.js" type="module"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | MUSKA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catalogo.js" type="module"></script>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo-container">
-            <img src="img/logo.png" alt="Logo de MUSKA" class="logo">
-        </div>
-        <div class="header-right">
-            <div class="social-links">
-                <a href="https://www.instagram.com/muskahome" target="_blank" aria-label="Instagram de Muska">
-                    <i class="fab fa-instagram social-icon"></i>
-                </a>
-            </div>
-            <nav class="nav-links">
-                <a href="index.html" class="catalog-link">Inicio</a>
-            </nav>
-        </div>
-    </header>
+    <header class="header">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Logo de MUSKA" class="logo">
+        </div>
+        <div class="header-right">
+            <div class="social-links">
+                <a href="https://www.instagram.com/muskahome" target="_blank" aria-label="Instagram de Muska">
+                    <i class="fab fa-instagram social-icon"></i>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="catalog-link">Inicio</a>
+            </nav>
+        </div>
+    </header>
 
-    <main class="main-content">
-        <section class="products-section">
-            <h2>Catálogo de Productos</h2>
-            <div class="product-grid" id="product-grid">
-                </div>
-        </section>
-    </main>
-    <div id="image-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <div id="modal-image-container" class="modal-image-container">
-            </div>
-        <button class="modal-nav prev">&#10094;</button>
-        <button class="modal-nav next">&#10095;</button>
-    </div>
-</div>
+    <main class="main-content">
+        <section class="products-section">
+            <h2>Catálogo de Productos</h2>
+            <div class="product-grid" id="product-grid">
+            </div>
+        </section>
+    </main>
+
+        <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="modal-image-container" class="modal-image-container">
+            </div>
+            <button class="modal-nav prev">&#10094;</button>
+            <button class="modal-nav next">&#10095;</button>
+        </div>
+    </div>
 
 </body>
 </html>
