@@ -178,20 +178,37 @@ body {
     margin: 0 10px 15px;
 }
 
-.buy-button {
-    background-color: #e6b8a2;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+/* --- Nuevos estilos para los productos del catálogo --- */
+.product-price {
+    font-size: 1.2rem;
     font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 15px;
+    color: #4b3e34;
+    margin: 5px 10px;
 }
 
-.buy-button:hover {
-    background-color: #d1a896;
+.product-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 5px 10px;
+}
+
+.product-stock {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.in-stock {
+    color: #4caf50; /* Verde para "En stock" */
+    background-color: #e8f5e9;
+}
+
+.out-of-stock {
+    color: #f44336; /* Rojo para "Sin stock" */
+    background-color: #ffebee;
 }
 
 /* --- ESTILOS DEL ADMINISTRADOR --- */
