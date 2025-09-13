@@ -4,12 +4,15 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
     const productForm = document.getElementById('product-form');
+    const formTitle = document.getElementById('form-title');
+    const productId = document.getElementById('product-id');
     const productName = document.getElementById('product-name');
     const productDescription = document.getElementById('product-description');
     const productPrice = document.getElementById('product-price');
-    const productImageUrl = document.getElementById('product-image-url');
+    const productImage = document.getElementById('product-image');
     const productCategory = document.getElementById('product-category');
     const productStock = document.getElementById('product-stock');
+    const submitBtn = document.getElementById('submit-btn');
     const productList = document.getElementById('product-list');
     const logoutBtn = document.getElementById('logout-btn');
 
@@ -39,53 +42,134 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Categoría: ${product.category}</p>
                 <p>Precio: $${product.price}</p>
                 <p>Stock: ${product.stock ? 'Sí' : 'No'}</p>
+                <button class="edit-btn" data-id="${product.id}">Editar</button>
                 <button class="delete-btn" data-id="${product.id}">Eliminar</button>
             `;
             productList.appendChild(productItem);
         });
 
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', loadProductForEdit);
+        });
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', deleteProduct);
         });
     }
 
-    // Manejar el envío del formulario para agregar un producto
+    // Manejar el envío del formulario para agregar/editar
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const newProduct = {
-            name: productName.value,
-            description: productDescription.value,
-            price: productPrice.value,
-            image_url: productImageUrl.value.split(',').map(url => url.trim()),
-            category: productCategory.value,
-            stock: productStock.checked,
-        };
+        const isEditing = productId.value !== '';
+        
+        if (isEditing) {
+            // Lógica para editar un producto
+            const updatedProduct = {
+                name: productName.value,
+                description: productDescription.value,
+                price: productPrice.value,
+                category: productCategory.value,
+                stock: productStock.checked,
+            };
 
-        const { data, error } = await supabase
-            .from('products')
-            .insert([newProduct]);
+            const { data, error } = await supabase
+                .from('products')
+                .update(updatedProduct)
+                .eq('id', productId.value);
 
-        if (error) {
-            console.error('Error al agregar el producto:', error);
+            if (error) {
+                console.error('Error al actualizar el producto:', error);
+            } else {
+                productForm.reset();
+                productId.value = '';
+                formTitle.textContent = 'Agregar Nuevo Producto';
+                submitBtn.textContent = 'Agregar Producto';
+                fetchProducts();
+            }
         } else {
-            productForm.reset();
-            fetchProducts();
+            // Lógica para agregar un nuevo producto
+            const files = productImage.files;
+            if (files.length === 0) {
+                alert('Por favor, sube al menos una imagen.');
+                return;
+            }
+            
+            const imageUrls = [];
+            for (const file of files) {
+                const filePath = `products/${Date.now()}-${file.name}`;
+                const { data, error } = await supabase.storage.from('products').upload(filePath, file);
+
+                if (error) {
+                    console.error('Error al subir la imagen:', error);
+                    alert('Error al subir la imagen.');
+                    return;
+                }
+                const publicURL = `${supabaseUrl}/storage/v1/object/public/products/${filePath}`;
+                imageUrls.push(publicURL);
+            }
+
+            const newProduct = {
+                name: productName.value,
+                description: productDescription.value,
+                price: productPrice.value,
+                image_url: imageUrls,
+                category: productCategory.value,
+                stock: productStock.checked,
+            };
+
+            const { data, error } = await supabase
+                .from('products')
+                .insert([newProduct]);
+
+            if (error) {
+                console.error('Error al agregar el producto:', error);
+            } else {
+                productForm.reset();
+                fetchProducts();
+            }
         }
     });
 
-    // Manejar la eliminación de un producto
-    async function deleteProduct(e) {
-        const productId = e.target.dataset.id;
-        const { data, error } = await supabase
+    // Cargar producto para editar
+    async function loadProductForEdit(e) {
+        const productIdToEdit = e.target.dataset.id;
+        const { data: product, error } = await supabase
             .from('products')
-            .delete()
-            .eq('id', productId);
+            .select('*')
+            .eq('id', productIdToEdit)
+            .single();
         
         if (error) {
-            console.error('Error al eliminar el producto:', error);
-        } else {
-            fetchProducts();
+            console.error('Error al cargar el producto para editar:', error);
+            return;
+        }
+
+        productId.value = product.id;
+        productName.value = product.name;
+        productDescription.value = product.description;
+        productPrice.value = product.price;
+        productCategory.value = product.category;
+        productStock.checked = product.stock;
+
+        formTitle.textContent = 'Editar Producto';
+        submitBtn.textContent = 'Guardar Cambios';
+    }
+
+    // Manejar la eliminación de un producto
+    async function deleteProduct(e) {
+        const productIdToDelete = e.target.dataset.id;
+        const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este producto?');
+        if (confirmDelete) {
+            const { error } = await supabase
+                .from('products')
+                .delete()
+                .eq('id', productIdToDelete);
+            
+            if (error) {
+                console.error('Error al eliminar el producto:', error);
+            } else {
+                fetchProducts();
+            }
         }
     }
 

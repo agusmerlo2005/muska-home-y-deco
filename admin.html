@@ -17,8 +17,9 @@
     <main class="container">
         
         <section class="admin-section">
-            <h2 style="text-align: center;">Agregar Nuevo Producto</h2>
+            <h2 id="form-title" style="text-align: center;">Agregar Nuevo Producto</h2>
             <form id="product-form" class="admin-form">
+                <input type="hidden" id="product-id">
                 <div class="form-group">
                     <label for="product-name">Nombre del Producto</label>
                     <input type="text" id="product-name" required>
@@ -32,8 +33,8 @@
                     <input type="number" id="product-price" required>
                 </div>
                 <div class="form-group">
-                    <label for="product-image-url">URLs de Imágenes (separadas por comas)</label>
-                    <textarea id="product-image-url" rows="3" required></textarea>
+                    <label for="product-image">Subir Imágenes</label>
+                    <input type="file" id="product-image" multiple accept="image/*" required>
                 </div>
                 
                 <div class="form-group">
@@ -50,7 +51,7 @@
                     <input type="checkbox" id="product-stock" checked>
                 </div>
                 
-                <button type="submit">Agregar Producto</button>
+                <button type="submit" id="submit-btn">Agregar Producto</button>
             </form>
         </section>
 
