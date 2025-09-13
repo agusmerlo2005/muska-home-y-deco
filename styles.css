@@ -429,3 +429,25 @@ body {
     background-color: #d1a896;
     transform: translateY(-2px);
 }
+
+/* --- ESTILOS DEL FILTRO DE CATEGORÍAS --- */
+.filter-container {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+.filter-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    cursor: pointer;
+}
