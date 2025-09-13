@@ -4,17 +4,30 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
     const productGrid = document.getElementById('product-grid');
-    const categoryFilter = document.getElementById('category-filter');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const filterMenu = document.getElementById('filter-menu');
     const modal = document.getElementById('image-modal');
     const modalImageContainer = document.getElementById('modal-image-container');
     const closeButton = document.querySelector('.close-button');
     const prevButton = document.querySelector('.modal-nav.prev');
     const nextButton = document.querySelector('.modal-nav.next');
+    const filterLinks = document.querySelectorAll('.filter-link');
+    const modalOverlay = document.getElementById('modal-overlay');
 
     let currentImages = [];
     let currentImageIndex = 0;
 
-    async function fetchProducts(category = 'all') {
+    // Lógica del menú hamburguesa
+    function toggleMenu() {
+        hamburgerBtn.classList.toggle('active');
+        filterMenu.classList.toggle('active');
+        modalOverlay.classList.toggle('active');
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    modalOverlay.addEventListener('click', toggleMenu);
+
+    async function fetchProducts(category = 'all', subcategory = null) {
         try {
             let query = supabase
                 .from('products')
@@ -22,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (category !== 'all') {
                 query = query.eq('category', category);
+                if (subcategory) {
+                    query = query.eq('subcategory', subcategory);
+                }
             }
 
             const { data: products, error } = await query;
@@ -93,12 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listeners
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', (event) => {
-            const selectedCategory = event.target.value;
-            fetchProducts(selectedCategory);
+    filterLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const selectedCategory = event.target.dataset.category;
+            const selectedSubcategory = event.target.dataset.subcategory || null;
+            fetchProducts(selectedCategory, selectedSubcategory);
+            toggleMenu(); // Cierra el menú al seleccionar una opción
         });
-    }
+    });
 
     closeButton.addEventListener('click', () => {
         modal.style.display = 'none';

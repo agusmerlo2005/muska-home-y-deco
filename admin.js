@@ -11,10 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const productPrice = document.getElementById('product-price');
     const productImage = document.getElementById('product-image');
     const productCategory = document.getElementById('product-category');
+    const productSubcategory = document.getElementById('product-subcategory');
+    const subcategoryGroup = document.getElementById('subcategory-group');
     const productStock = document.getElementById('product-stock');
     const submitBtn = document.getElementById('submit-btn');
     const productList = document.getElementById('product-list');
     const logoutBtn = document.getElementById('logout-btn');
+
+    // Manejar la visibilidad del menú de subcategorías
+    productCategory.addEventListener('change', () => {
+        if (productCategory.value === 'Cocina') {
+            subcategoryGroup.style.display = 'block';
+        } else {
+            subcategoryGroup.style.display = 'none';
+        }
+    });
 
     // Cargar y mostrar productos existentes
     async function fetchProducts() {
@@ -36,10 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
         products.forEach(product => {
             const productItem = document.createElement('div');
             productItem.classList.add('product-item');
+            const subcategoryDisplay = product.subcategory ? `<br>Subcategoría: ${product.subcategory}` : '';
             productItem.innerHTML = `
                 <img src="${product.image_url[0]}" alt="${product.name}" style="width:100%; height:auto;">
                 <h3>${product.name}</h3>
-                <p>Categoría: ${product.category}</p>
+                <p>Categoría: ${product.category}${subcategoryDisplay}</p>
                 <p>Precio: $${product.price}</p>
                 <p>Stock: ${product.stock ? 'Sí' : 'No'}</p>
                 <button class="edit-btn" data-id="${product.id}">Editar</button>
@@ -69,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: productDescription.value,
                 price: productPrice.value,
                 category: productCategory.value,
+                subcategory: productCategory.value === 'Cocina' ? productSubcategory.value : null,
                 stock: productStock.checked,
             };
 
@@ -84,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productId.value = '';
                 formTitle.textContent = 'Agregar Nuevo Producto';
                 submitBtn.textContent = 'Agregar Producto';
+                subcategoryGroup.style.display = 'none';
                 fetchProducts();
             }
         } else {
@@ -104,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Error al subir la imagen.');
                     return;
                 }
-                const publicURL = `${supabaseUrl}/storage/v1/object/public/products/${filePath}`;
+                const publicURL = `${supabaseUrl}/storage/v1/object/public/products/${data.path}`;
                 imageUrls.push(publicURL);
             }
 
@@ -114,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: productPrice.value,
                 image_url: imageUrls,
                 category: productCategory.value,
+                subcategory: productCategory.value === 'Cocina' ? productSubcategory.value : null,
                 stock: productStock.checked,
             };
 
@@ -125,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error al agregar el producto:', error);
             } else {
                 productForm.reset();
+                subcategoryGroup.style.display = 'none';
                 fetchProducts();
             }
         }
@@ -150,6 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
         productPrice.value = product.price;
         productCategory.value = product.category;
         productStock.checked = product.stock;
+
+        if (product.category === 'Cocina' && product.subcategory) {
+            subcategoryGroup.style.display = 'block';
+            productSubcategory.value = product.subcategory;
+        } else {
+            subcategoryGroup.style.display = 'none';
+            productSubcategory.value = '';
+        }
 
         formTitle.textContent = 'Editar Producto';
         submitBtn.textContent = 'Guardar Cambios';
