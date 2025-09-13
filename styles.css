@@ -204,13 +204,13 @@ body {
 }
 
 .in-stock {
-    color: #4b3e34;
-    background-color: #d1a896;
+    color: #4caf50;
+    background-color: #e8f5e9;
 }
 
 .out-of-stock {
-    color: #925c40;
-    background-color: #f7e0d1;
+    color: #f44336;
+    background-color: #ffebee;
 }
 
 /* --- ESTILOS PARA LA GALERÍA DE IMÁGENES (MODAL) --- */
