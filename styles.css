@@ -76,7 +76,7 @@ body {
 /* --- ESTILOS DE LA SECCIÓN PRINCIPAL (HERO) --- */
 .main-content {
     display: flex;
-    flex-direction: column; /* Agregado para apilar las secciones verticalmente */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 80px);
@@ -204,13 +204,13 @@ body {
 }
 
 .in-stock {
-    color: #4caf50;
-    background-color: #e8f5e9;
+    color: #4b3e34; /* Usando color de tu paleta */
+    background-color: #d1a896; /* Usando color de tu paleta */
 }
 
 .out-of-stock {
-    color: #f44336;
-    background-color: #ffebee;
+    color: #925c40; /* Color alternativo para stock */
+    background-color: #f7e0d1; /* Usando color de tu paleta */
 }
 
 /* --- Estilos para la galería de imágenes (modal) --- */

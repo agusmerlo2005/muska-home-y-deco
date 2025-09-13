@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 .select('*');
 
             if (category !== 'all') {
-                query = query.eq('category', category);
                 if (subcategory) {
                     query = query.eq('subcategory', subcategory);
+                } else {
+                    query = query.eq('category', category);
                 }
             }
 
