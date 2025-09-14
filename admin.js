@@ -48,12 +48,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const productItem = document.createElement('div');
             productItem.classList.add('product-item');
             const subcategoryDisplay = product.subcategory ? `<br>Subcategoría: ${product.subcategory}` : '';
+
+            // Corregido: si image_url es un array, toma la primera imagen; si es un string, úsalo directamente.
+            const imageUrl = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
+            
             productItem.innerHTML = `
-                <img src="${product.image_url[0]}" alt="${product.name}" style="width:100%; height:auto;">
+                <img src="${imageUrl}" alt="${product.name}" style="width:100%; height:auto;">
                 <h3>${product.name}</h3>
                 <p>Categoría: ${product.category}${subcategoryDisplay}</p>
                 <p>Precio: $${product.price}</p>
                 <p>Stock: ${product.stock ? 'Sí' : 'No'}</p>
+                <button class="toggle-stock-btn" data-id="${product.id}">${product.stock ? 'Quitar Stock' : 'Agregar Stock'}</button>
                 <button class="edit-btn" data-id="${product.id}">Editar</button>
                 <button class="delete-btn" data-id="${product.id}">Eliminar</button>
             `;
@@ -66,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', deleteProduct);
         });
+        document.querySelectorAll('.toggle-stock-btn').forEach(button => {
+            button.addEventListener('click', toggleProductStock);
+        });
     }
 
     // Manejar el envío del formulario para agregar/editar
@@ -74,17 +82,36 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const isEditing = productId.value !== '';
         
+        // Manejar la subida de imágenes
+        let imageUrls = [];
+        const files = productImage.files;
+        if (files.length > 0) {
+            for (const file of files) {
+                const filePath = `products/${Date.now()}-${file.name}`;
+                const { data, error: uploadError } = await supabase.storage.from('products').upload(filePath, file);
+
+                if (uploadError) {
+                    console.error('Error al subir la imagen:', uploadError);
+                    alert('Error al subir la imagen.');
+                    return;
+                }
+                const publicURL = `${supabaseUrl}/storage/v1/object/public/products/${data.path}`;
+                imageUrls.push(publicURL);
+            }
+        }
+
         const productData = {
             name: productName.value,
             description: productDescription.value,
-            price: productPrice.value,
+            price: parseFloat(productPrice.value),
             category: productCategory.value,
-            subcategory: productCategory.value === 'Cocina' ? productSubcategory.value : null,
+            subcategory: productSubcategory.value || null,
             stock: productStock.checked,
+            // Solo actualiza image_url si hay nuevas imágenes
+            ...(imageUrls.length > 0 && { image_url: imageUrls })
         };
 
         if (isEditing) {
-            // Lógica para editar un producto
             const { error } = await supabase
                 .from('products')
                 .update(productData)
@@ -101,32 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetchProducts();
             }
         } else {
-            // Lógica para agregar un nuevo producto
-            const files = productImage.files;
-            if (files.length === 0) {
-                alert('Por favor, sube al menos una imagen.');
-                return;
-            }
-            
-            const imageUrls = [];
-            for (const file of files) {
-                const filePath = `products/${Date.now()}-${file.name}`;
-                const { data, error } = await supabase.storage.from('products').upload(filePath, file);
-
-                if (error) {
-                    console.error('Error al subir la imagen:', error);
-                    alert('Error al subir la imagen.');
-                    return;
-                }
-                const publicURL = `${supabaseUrl}/storage/v1/object/public/products/${data.path}`;
-                imageUrls.push(publicURL);
-            }
-
-            const newProduct = {
-                ...productData,
-                image_url: imageUrls,
-            };
-
+            const newProduct = { ...productData, image_url: imageUrls };
             const { error } = await supabase
                 .from('products')
                 .insert([newProduct]);
@@ -162,12 +164,21 @@ document.addEventListener('DOMContentLoaded', () => {
         productCategory.value = product.category;
         productStock.checked = product.stock;
 
-        if (product.category === 'Cocina' && product.subcategory) {
+        const selectedCategory = product.category;
+        if (selectedCategory === 'Cocina') {
             subcategoryGroup.style.display = 'block';
-            productSubcategory.value = product.subcategory;
+            productSubcategory.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+            ['Organizadores', 'Vajillas', 'Jarras/Botellas'].forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.textContent = sub;
+                productSubcategory.appendChild(option);
+            });
+            if (product.subcategory) {
+                productSubcategory.value = product.subcategory;
+            }
         } else {
             subcategoryGroup.style.display = 'none';
-            productSubcategory.value = '';
         }
 
         formTitle.textContent = 'Editar Producto';
@@ -189,6 +200,33 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 fetchProducts();
             }
+        }
+    }
+
+    // Manejar el cambio de stock
+    async function toggleProductStock(e) {
+        const productIdToToggle = e.target.dataset.id;
+        const { data: product, error } = await supabase
+            .from('products')
+            .select('stock')
+            .eq('id', productIdToToggle)
+            .single();
+
+        if (error) {
+            console.error('Error al obtener el stock:', error);
+            return;
+        }
+
+        const newStockStatus = !product.stock;
+        const { error: updateError } = await supabase
+            .from('products')
+            .update({ stock: newStockStatus })
+            .eq('id', productIdToToggle);
+
+        if (updateError) {
+            console.error('Error al actualizar el stock:', updateError);
+        } else {
+            fetchProducts();
         }
     }
 
