@@ -7,11 +7,10 @@ body {
     padding: 0;
     background-color: #f7f3f0;
     color: #333;
-    overflow-x: hidden; /* Evita el scroll horizontal general */
+    overflow-x: hidden;
 }
 
 /* --- ESTILOS DEL ENCABEZADO (HEADER) --- */
-/* Tus estilos originales del header, adaptados para que funcionen en catalogo.html */
 .header {
     display: flex;
     justify-content: space-between;
@@ -30,7 +29,7 @@ body {
 }
 
 .logo {
-    height: 60px; /* Tamaño del logo original */
+    height: 60px;
     width: auto;
 }
 
@@ -75,7 +74,6 @@ body {
 }
 
 /* --- ESTILOS DE LA SECCIÓN PRINCIPAL (HERO) --- */
-/* (Tus estilos originales para la página de inicio, sin modificar) */
 .main-content {
     display: flex;
     flex-direction: column;
@@ -131,10 +129,10 @@ body {
     .header {
         flex-direction: column;
         gap: 10px;
-        padding: 10px; /* Ajuste para móviles */
+        padding: 10px;
     }
     .header-right {
-        flex-direction: column; /* Apilar en móviles */
+        flex-direction: column;
         gap: 10px;
     }
     .nav-links {
@@ -143,10 +141,9 @@ body {
     }
 }
 
-
 /* --- ESTILOS DEL CATÁLOGO --- */
 .container {
-    max-width: 1200px; /* Aumenta el ancho máximo para el catálogo */
+    max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
 }
@@ -161,7 +158,7 @@ h2 {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajustado para mejor distribución */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
     margin-top: 30px;
 }
@@ -172,7 +169,10 @@ h2 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center; /* Centrar contenido de la tarjeta */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
 }
 
 .product-card:hover {
@@ -180,19 +180,29 @@ h2 {
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.product-image {
+.product-image-container {
     width: 100%;
     height: 250px;
-    object-fit: cover;
-    display: block; /* Para eliminar espacio extra bajo la imagen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdfaf8;
     border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .product-card h3 {
     font-size: 1.3rem;
     color: #4b3e34;
     margin: 15px 10px 5px;
-    padding: 0 10px; /* Añadido padding para texto */
+    padding: 0 10px;
 }
 
 .product-description {
@@ -214,22 +224,23 @@ h2 {
 .product-stock {
     font-size: 1rem;
     font-weight: 500;
-    margin: 10px auto 20px auto; /* Centrar horizontalmente */
+    margin: 10px auto 20px auto;
     padding: 5px 15px;
-    border-radius: 20px; /* Más redondeado */
-    display: inline-block; /* Para que el padding y border-radius funcionen bien */
-    width: auto; /* Ancho ajustado al contenido */
+    border-radius: 20px;
+    display: inline-block;
+    width: auto;
 }
 
-/* Colores de stock ajustados a tu paleta (más oscuros y legibles) */
 .in-stock {
-    color: #4b3e34; /* Un marrón oscuro de tu paleta */
-    background-color: #e6d7cc; /* Un tono más claro y cálido de tu paleta */
+    color: #4b3e34;
+    background-color: #e6d7cc;
 }
 
 .out-of-stock {
-    color: #925c40; /* Un marrón rojizo */
-    background-color: #f7e0d1; /* Un beige más cálido */
+    color: #925c40;
+    background-color: #f7e0d1;
+    opacity: 0.6;
+    filter: grayscale(30%);
 }
 
 /* --- ESTILOS PARA LA GALERÍA DE IMÁGENES (MODAL) --- */
@@ -243,7 +254,7 @@ h2 {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.9);
-    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .image-modal .close-button {
@@ -275,10 +286,10 @@ h2 {
     margin: auto;
     display: block;
     max-width: 90%;
-    max-height: 90vh; /* Ajuste para asegurar que la imagen quepa bien */
+    max-height: 90vh;
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    animation: zoomIn 0.3s ease-in-out; /* Animación para la imagen */
+    animation: zoomIn 0.3s ease-in-out;
 }
 
 @keyframes zoomIn {
@@ -295,7 +306,7 @@ h2 {
     cursor: pointer;
     position: absolute;
     top: 50%;
-    transform: translateY(-50%); /* Centrar verticalmente */
+    transform: translateY(-50%);
     width: auto;
     padding: 16px;
     color: white;
@@ -305,7 +316,7 @@ h2 {
     user-select: none;
     background-color: rgba(0,0,0,0.5);
     border: none;
-    border-radius: 5px; /* Pequeño redondeo */
+    border-radius: 5px;
 }
 
 .modal-nav.prev {
@@ -321,7 +332,7 @@ h2 {
 }
 
 /* --- ESTILOS DEL ADMINISTRADOR --- */
-/* (Tus estilos originales para el administrador, sin modificar) */
+/* NOTA: Estos estilos deberían estar en admin.css si separas la administración */
 .admin-form {
     background-color: #ffffff;
     padding: 30px;
@@ -453,7 +464,7 @@ h2 {
 .filter-header {
     display: flex;
     align-items: center;
-    margin: 20px auto 10px auto; /* Centrar el header del filtro */
+    margin: 20px auto 10px auto;
     max-width: 1200px;
     padding: 0 20px;
 }
@@ -524,7 +535,7 @@ h2 {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: left 0.3s ease;
     z-index: 100;
-    box-sizing: border-box; /* Asegura que el padding no afecte el width */
+    box-sizing: border-box;
 }
 
 .filter-menu.active {
@@ -570,31 +581,31 @@ h2 {
 /* Media Queries para catálogo específico */
 @media (max-width: 900px) {
     .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Reducir tamaño de tarjeta */
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 20px;
     }
 }
 
 @media (max-width: 600px) {
     .product-grid {
-        grid-template-columns: 1fr; /* Una columna en móviles pequeños */
-        padding: 0 10px; /* Padding para evitar que toque los bordes */
+        grid-template-columns: 1fr;
+        padding: 0 10px;
     }
     .product-card {
-        margin: auto; /* Centrar tarjetas */
-        max-width: 300px; /* Limitar ancho en móvil */
+        margin: auto;
+        max-width: 300px;
     }
     .container {
-        padding: 10px; /* Reducir padding general del container */
+        padding: 10px;
     }
     h2 {
-        font-size: 2rem; /* Tamaño de título más pequeño */
+        font-size: 2rem;
     }
     .filter-menu {
-        width: 80%; /* Hacer el menú lateral más ancho en móvil */
+        width: 80%;
     }
     .modal-main-image {
-        max-width: 95%; /* Asegurar que la imagen del modal quepa */
+        max-width: 95%;
         max-height: 85vh;
     }
 }
