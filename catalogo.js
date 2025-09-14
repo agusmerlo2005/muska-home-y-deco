@@ -1,52 +1,46 @@
-const supabaseUrl = 'https://ucjnlylxjaezfgbmckkg.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjam5seWx4amFlemZnYm1ja2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDIyOTksImV4cCI6MjA3MzExODI5OX0.N3QoSWDDAkEQ811oOV97aalQTuH25i2bYHHZ0TQt2q0';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+const SUPABASE_URL = 'https://ucjnlylxjaezfgbmckkg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjam5seWx4amFlemZnYm1ja2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1NDIyOTksImV4cCI6MjA3MzExODI5OX0.N3QoSWDDAkEQ811oOV97aalQTuH25i2bYHHZ0TQt2q0';
 
-let currentProducts = [];
-let currentImageIndex = 0;
-let currentImageUrls = [];
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const filterMenu = document.getElementById('filter-menu');
-    const modalOverlay = document.getElementById('modal-overlay');
     const productGrid = document.getElementById('product-grid');
+    const filterMenu = document.getElementById('filter-menu');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
     const imageModal = document.getElementById('image-modal');
-    const closeBtn = document.querySelector('.close-button');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
+    const modalImageContainer = document.getElementById('modal-image-container');
+    const closeModalButton = document.querySelector('.close-button');
+    const modalNavPrev = document.querySelector('.modal-nav.prev');
+    const modalNavNext = document.querySelector('.modal-nav.next');
+    const modalOverlay = document.getElementById('modal-overlay');
+
+    let currentProducts = [];
+    let currentIndex = 0;
+    let currentImageUrls = [];
+
+    // Abrir/cerrar menú en dispositivos móviles
+    hamburgerBtn.addEventListener('click', () => {
+        filterMenu.classList.toggle('active');
+        modalOverlay.style.display = filterMenu.classList.contains('active') ? 'block' : 'none';
+    });
+
+    modalOverlay.addEventListener('click', () => {
+        filterMenu.classList.remove('active');
+        modalOverlay.style.display = 'none';
+    });
 
     // Función para obtener productos de Supabase
-    async function fetchProducts(category = null, subcategory = null) {
-        let query = supabase.from('products').select('*');
-
-        if (category === 'all') {
-            // Mostrar todos los productos
-            query = supabase.from('products').select('*');
-        } else if (subcategory) {
-            // Filtrar por subcategoría
-            query = query.eq('subcategory', subcategory);
-        } else if (category) {
-            // Filtrar por categoría principal
-            query = query.eq('category', category);
-        }
-
-        const { data, error } = await query;
+    async function fetchProducts() {
+        const { data: products, error } = await supabase
+            .from('products')
+            .select('*');
 
         if (error) {
-            console.error('Error al obtener productos:', error.message);
-            productGrid.innerHTML = '<p class="error-message">No se pudieron cargar los productos. Por favor, inténtelo de nuevo más tarde.</p>';
+            console.error('Error al obtener productos:', error);
             return;
         }
-
-        if (data.length === 0) {
-            productGrid.innerHTML = '<p class="no-results-message">No hay productos en esta categoría.</p>';
-            currentProducts = [];
-            return;
-        }
-
-        currentProducts = data;
-        renderProducts(data);
+        currentProducts = products;
+        renderProducts(products);
     }
 
     // Función para renderizar los productos en la cuadrícula
@@ -56,96 +50,93 @@ document.addEventListener('DOMContentLoaded', () => {
             const productCard = document.createElement('div');
             productCard.classList.add('product-card');
 
-            const stockStatus = product.stock ? 'in-stock' : 'out-of-stock';
-            const stockText = product.stock ? 'En Stock' : 'Sin Stock';
+            // Maneja la URL de la imagen, ya sea un array o un string
+            const imageUrl = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
 
             productCard.innerHTML = `
                 <div class="product-image-container">
-                    <img class="product-image" src="${product.image_url}" alt="${product.name}">
+                    <img src="${imageUrl}" alt="${product.name}" class="product-image" data-urls='${JSON.stringify(product.image_url)}'>
                 </div>
-                <h3>${product.name}</h3>
-                <p class="product-description">${product.description}</p>
-                <p class="product-price">$${product.price}</p>
-                <span class="product-stock ${stockStatus}">${stockText}</span>
+                <div class="product-details">
+                    <h3>${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <p class="product-price">$${product.price}</p>
+                    <div class="product-stock ${product.stock ? 'con-stock' : 'sin-stock'}">
+                        ${product.stock ? 'En Stock' : 'Sin Stock'}
+                    </div>
+                </div>
             `;
-
-            productCard.addEventListener('click', () => {
-                openImageModal(product.image_url);
-            });
-
             productGrid.appendChild(productCard);
         });
     }
 
-    // Funciones para el modal de imágenes
-    function openImageModal(imageUrl) {
-        currentImageUrls = [imageUrl]; // Solo una imagen por ahora
-        currentImageIndex = 0;
-        updateModalImage();
-        imageModal.style.display = 'block';
-        modalOverlay.style.display = 'block';
-    }
-
-    function updateModalImage() {
-        if (currentImageUrls.length > 0) {
-            const img = document.createElement('img');
-            img.src = currentImageUrls[currentImageIndex];
-            img.classList.add('modal-main-image');
-            const modalImageContainer = document.getElementById('modal-image-container');
-            modalImageContainer.innerHTML = ''; // Limpiar
-            modalImageContainer.appendChild(img);
+    // Manejar clics en las imágenes para abrir el modal
+    productGrid.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('product-image')) {
+            imageModal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            currentImageUrls = JSON.parse(target.dataset.urls);
+            currentIndex = 0;
+            displayModalImage();
         }
+    });
+
+    // Mostrar la imagen actual en el modal
+    function displayModalImage() {
+        modalImageContainer.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = currentImageUrls[currentIndex];
+        img.classList.add('modal-main-image'); // **Línea corregida**
+        modalImageContainer.appendChild(img);
+        modalNavPrev.style.display = currentIndex > 0 ? 'block' : 'none';
+        modalNavNext.style.display = currentIndex < currentImageUrls.length - 1 ? 'block' : 'none';
     }
 
-    closeBtn.addEventListener('click', () => {
+    // Navegar en el modal
+    modalNavPrev.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            displayModalImage();
+        }
+    });
+
+    modalNavNext.addEventListener('click', () => {
+        if (currentIndex < currentImageUrls.length - 1) {
+            currentIndex++;
+            displayModalImage();
+        }
+    });
+
+    // Cerrar modal
+    closeModalButton.addEventListener('click', () => {
         imageModal.style.display = 'none';
         modalOverlay.style.display = 'none';
     });
 
-    modalOverlay.addEventListener('click', () => {
-        imageModal.style.display = 'none';
-        modalOverlay.style.display = 'none';
-    });
+    // Manejar clics en el menú de filtro
+    filterMenu.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = e.target;
 
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex - 1 + currentImageUrls.length) % currentImageUrls.length;
-            updateModalImage();
-        });
-    }
+        if (target.classList.contains('filter-link')) {
+            const category = target.dataset.category;
+            const subcategory = target.dataset.subcategory;
 
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex + 1) % currentImageUrls.length;
-            updateModalImage();
-        });
-    }
-
-    // Eventos del menú de filtrado
-    hamburgerBtn.addEventListener('click', () => {
-        filterMenu.classList.toggle('active');
-        modalOverlay.classList.toggle('active');
-        hamburgerBtn.classList.toggle('active');
-    });
-
-    modalOverlay.addEventListener('click', () => {
-        filterMenu.classList.remove('active');
-        modalOverlay.classList.remove('active');
-        hamburgerBtn.classList.remove('active');
-    });
-
-    filterMenu.querySelectorAll('.filter-link').forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const category = event.target.dataset.category;
-            const subcategory = event.target.dataset.subcategory;
-            fetchProducts(category, subcategory);
+            let filteredProducts;
+            if (category === 'all') {
+                filteredProducts = currentProducts;
+            } else if (subcategory) {
+                filteredProducts = currentProducts.filter(p => p.subcategory === subcategory);
+            } else {
+                filteredProducts = currentProducts.filter(p => p.category === category && !p.subcategory);
+            }
+            renderProducts(filteredProducts);
             filterMenu.classList.remove('active');
-            modalOverlay.classList.remove('active');
-            hamburgerBtn.classList.remove('active');
-        });
+            modalOverlay.style.display = 'none';
+        }
     });
 
-    // Cargar todos los productos al inicio
-    fetchProducts('all');
+    // Cargar productos al iniciar la página
+    fetchProducts();
 });
