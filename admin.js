@@ -18,16 +18,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const productList = document.getElementById('product-list');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // Manejar la visibilidad del menú de subcategorías
+    // **CORRECCIÓN AQUÍ:** Ahora el menú de subcategorías se llena al seleccionar 'Cocina'
     productCategory.addEventListener('change', () => {
         if (productCategory.value === 'Cocina') {
             subcategoryGroup.style.display = 'block';
+            productSubcategory.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+            ['Organizadores', 'Vajillas', 'Jarras/Botellas'].forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.textContent = sub;
+                productSubcategory.appendChild(option);
+            });
         } else {
             subcategoryGroup.style.display = 'none';
         }
     });
 
-    // Cargar y mostrar productos existentes
     async function fetchProducts() {
         const { data: products, error } = await supabase
             .from('products')
@@ -41,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProducts(products);
     }
 
-    // Renderizar los productos en la lista
     function renderProducts(products) {
         productList.innerHTML = '';
         products.forEach(product => {
@@ -49,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productItem.classList.add('product-item');
             const subcategoryDisplay = product.subcategory ? `<br>Subcategoría: ${product.subcategory}` : '';
 
-            // Corregido: si image_url es un array, toma la primera imagen; si es un string, úsalo directamente.
             const imageUrl = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
             
             productItem.innerHTML = `
@@ -76,13 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Manejar el envío del formulario para agregar/editar
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const isEditing = productId.value !== '';
         
-        // Manejar la subida de imágenes
         let imageUrls = [];
         const files = productImage.files;
         if (files.length > 0) {
@@ -100,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Se crea el objeto base con los datos del formulario
         const productData = {
             name: productName.value,
             description: productDescription.value,
@@ -111,8 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (isEditing) {
-            // **CORRECCIÓN para el modo de edición**
-            // Solo actualiza la imagen si se subió una nueva.
             if (imageUrls.length > 0) {
                 productData.image_url = imageUrls;
             }
@@ -133,8 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetchProducts();
             }
         } else {
-            // **CORRECCIÓN para el modo de agregar**
-            // Se le asigna el array de URLs (vacío o con datos)
             productData.image_url = imageUrls;
 
             const { error } = await supabase
@@ -151,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Cargar producto para editar
     async function loadProductForEdit(e) {
         const productIdToEdit = e.target.dataset.id;
         const { data: product, error } = await supabase
@@ -193,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Guardar Cambios';
     }
 
-    // Manejar la eliminación de un producto
     async function deleteProduct(e) {
         const productIdToDelete = e.target.dataset.id;
         const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este producto?');
@@ -211,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Manejar el cambio de stock
     async function toggleProductStock(e) {
         const productIdToToggle = e.target.dataset.id;
         const { data: product, error } = await supabase
@@ -238,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Manejar el cierre de sesión
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             const { error } = await supabase.auth.signOut();

@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalImageContainer.innerHTML = '';
         const img = document.createElement('img');
         img.src = currentImageUrls[currentIndex];
-        img.classList.add('modal-main-image'); // **Línea corregida**
+        img.classList.add('modal-main-image');
         modalImageContainer.appendChild(img);
         modalNavPrev.style.display = currentIndex > 0 ? 'block' : 'none';
         modalNavNext.style.display = currentIndex < currentImageUrls.length - 1 ? 'block' : 'none';
@@ -118,18 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
     filterMenu.addEventListener('click', (e) => {
         e.preventDefault();
         const target = e.target;
-
+        
         if (target.classList.contains('filter-link')) {
             const category = target.dataset.category;
             const subcategory = target.dataset.subcategory;
-
+            
             let filteredProducts;
             if (category === 'all') {
                 filteredProducts = currentProducts;
             } else if (subcategory) {
+                // CORRECCIÓN: Filtrar por subcategoría sin importar la categoría padre
                 filteredProducts = currentProducts.filter(p => p.subcategory === subcategory);
             } else {
-                filteredProducts = currentProducts.filter(p => p.category === category && !p.subcategory);
+                // CORRECCIÓN: Filtrar por categoría
+                filteredProducts = currentProducts.filter(p => p.category === category);
             }
             renderProducts(filteredProducts);
             filterMenu.classList.remove('active');
