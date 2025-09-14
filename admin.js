@@ -54,42 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Categoría: ${product.category}${subcategoryDisplay}</p>
                 <p>Precio: $${product.price}</p>
                 <p>Stock: ${product.stock ? 'Sí' : 'No'}</p>
-                <button class="toggle-stock-btn" data-id="${product.id}" data-stock="${product.stock}">
-                    ${product.stock ? 'Quitar stock' : 'Agregar stock'}
-                </button>
                 <button class="edit-btn" data-id="${product.id}">Editar</button>
                 <button class="delete-btn" data-id="${product.id}">Eliminar</button>
             `;
             productList.appendChild(productItem);
         });
 
-        document.querySelectorAll('.toggle-stock-btn').forEach(button => {
-            button.addEventListener('click', toggleStock);
-        });
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', loadProductForEdit);
         });
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', deleteProduct);
         });
-    }
-
-    // Nueva función para alternar el estado del stock
-    async function toggleStock(e) {
-        const productIdToToggle = e.target.dataset.id;
-        const currentStockStatus = e.target.dataset.stock === 'true';
-        const newStockStatus = !currentStockStatus;
-        
-        const { error } = await supabase
-            .from('products')
-            .update({ stock: newStockStatus })
-            .eq('id', productIdToToggle);
-        
-        if (error) {
-            console.error('Error al actualizar el stock:', error);
-        } else {
-            fetchProducts();
-        }
     }
 
     // Manejar el envío del formulario para agregar/editar
