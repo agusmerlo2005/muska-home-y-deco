@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Se crea el objeto base con los datos del formulario
         const productData = {
             name: productName.value,
             description: productDescription.value,
@@ -107,11 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
             category: productCategory.value,
             subcategory: productSubcategory.value || null,
             stock: productStock.checked,
-            // Solo actualiza image_url si hay nuevas imágenes
-            ...(imageUrls.length > 0 && { image_url: imageUrls })
         };
 
         if (isEditing) {
+            // **CORRECCIÓN para el modo de edición**
+            // Solo actualiza la imagen si se subió una nueva.
+            if (imageUrls.length > 0) {
+                productData.image_url = imageUrls;
+            }
+
             const { error } = await supabase
                 .from('products')
                 .update(productData)
@@ -128,10 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetchProducts();
             }
         } else {
-            const newProduct = { ...productData, image_url: imageUrls };
+            // **CORRECCIÓN para el modo de agregar**
+            // Se le asigna el array de URLs (vacío o con datos)
+            productData.image_url = imageUrls;
+
             const { error } = await supabase
                 .from('products')
-                .insert([newProduct]);
+                .insert([productData]);
 
             if (error) {
                 console.error('Error al agregar el producto:', error);
