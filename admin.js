@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submit-btn');
     const productList = document.getElementById('product-list');
     const logoutBtn = document.getElementById('logout-btn');
+    const searchInput = document.getElementById('search-input'); // Nuevo elemento
+    let allProducts = []; // Almacena todos los productos para el filtro
 
-    // **CORRECCIÓN AQUÍ:** Ahora el menú de subcategorías se llena al seleccionar 'Cocina'
     productCategory.addEventListener('change', () => {
         if (productCategory.value === 'Cocina') {
             subcategoryGroup.style.display = 'block';
@@ -44,31 +45,63 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        renderProducts(products);
+        allProducts = products; // Almacenar todos los productos
+        renderProducts(allProducts);
     }
 
+    // MODIFICADO: FUNCIÓN PARA RENDERIZAR LOS PRODUCTOS COMO UNA TABLA
     function renderProducts(products) {
-        productList.innerHTML = '';
+        if (products.length === 0) {
+            productList.innerHTML = '<p>No se encontraron productos.</p>';
+            return;
+        }
+
+        // Crear la estructura de la tabla
+        let tableHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Subcategoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        // Agregar cada producto como una fila de la tabla
         products.forEach(product => {
-            const productItem = document.createElement('div');
-            productItem.classList.add('product-item');
-            const subcategoryDisplay = product.subcategory ? `<br>Subcategoría: ${product.subcategory}` : '';
-
-            const imageUrl = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
+            const subcategoryDisplay = product.subcategory ? product.subcategory : '-';
+            const stockDisplay = product.stock ? 'Sí' : 'No';
             
-            productItem.innerHTML = `
-                <img src="${imageUrl}" alt="${product.name}" style="width:100%; height:auto;">
-                <h3>${product.name}</h3>
-                <p>Categoría: ${product.category}${subcategoryDisplay}</p>
-                <p>Precio: $${product.price}</p>
-                <p>Stock: ${product.stock ? 'Sí' : 'No'}</p>
-                <button class="toggle-stock-btn" data-id="${product.id}">${product.stock ? 'Quitar Stock' : 'Agregar Stock'}</button>
-                <button class="edit-btn" data-id="${product.id}">Editar</button>
-                <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+            tableHTML += `
+                <tr data-id="${product.id}">
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>${subcategoryDisplay}</td>
+                    <td>$${product.price}</td>
+                    <td>${stockDisplay}</td>
+                    <td>
+                        <button class="toggle-stock-btn" data-id="${product.id}">
+                            ${product.stock ? 'Quitar' : 'Agregar'}
+                        </button>
+                        <button class="edit-btn" data-id="${product.id}">Editar</button>
+                        <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+                    </td>
+                </tr>
             `;
-            productList.appendChild(productItem);
         });
+        
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+        productList.innerHTML = tableHTML;
 
+        // Volver a adjuntar los event listeners a los botones recién creados
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', loadProductForEdit);
         });
@@ -242,6 +275,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredProducts = allProducts.filter(product => 
+            product.name.toLowerCase().includes(searchTerm)
+        );
+        renderProducts(filteredProducts);
+    });
 
     fetchProducts();
 });

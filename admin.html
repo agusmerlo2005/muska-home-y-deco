@@ -44,7 +44,7 @@
                         <option value="Cocina">Cocina</option>
                         <option value="Baño">Baño</option>
                         <option value="Textiles">Textiles</option>
-                        <option value="Difusores/Home Spray">Difusores/HomeSpray</option>
+                        <option value="Difusores/Home Spray">Difusores/Home Spray</option>
                     </select>
                 </div>
 
@@ -52,7 +52,7 @@
                     <label for="product-subcategory">Subcategoría</label>
                     <select id="product-subcategory">
                         <option value="">Selecciona una subcategoría</option>
-                        </select>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -63,13 +63,16 @@
                 <button type="submit" id="submit-btn">Agregar Producto</button>
             </form>
         </section>
-
-        <section class="admin-section">
-            <h2 style="text-align: center;">Productos Existentes</h2>
+        
+        <section class="admin-section my-products-section">
+            <h2 style="text-align: center;">Mis Productos</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar por nombre...">
+            </div>
             <div id="product-list" class="product-list">
                 </div>
         </section>
-        
+
     </main>
 
     <script src="admin.js"></script>
