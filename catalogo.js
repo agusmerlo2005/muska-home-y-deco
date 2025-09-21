@@ -18,6 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let currentImageUrls = [];
 
+    // VARIABLES PARA PAGINACIÓN
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let totalProducts = 0;
+    
+    // CREAR Y AGREGAR CONTENEDOR DE PAGINACIÓN AL DOM
+    const paginationContainer = document.createElement('div');
+    paginationContainer.classList.add('pagination-container');
+    productGrid.parentNode.insertBefore(paginationContainer, productGrid.nextSibling);
+
     // Abrir/cerrar menú en dispositivos móviles
     hamburgerBtn.addEventListener('click', () => {
         filterMenu.classList.toggle('active');
@@ -29,20 +39,35 @@ document.addEventListener('DOMContentLoaded', () => {
         modalOverlay.style.display = 'none';
     });
 
-    // Función para obtener productos de Supabase
-    async function fetchProducts() {
-        const { data: products, error } = await supabase
-            .from('products')
-            .select('*');
+    // Función para obtener productos de Supabase con paginación y filtros
+    async function fetchProducts(page = 1, category = 'all', subcategory = null) {
+        const from = (page - 1) * itemsPerPage;
+        const to = from + itemsPerPage - 1;
+
+        let query = supabase.from('products').select('*', { count: 'exact' });
+
+        if (category !== 'all') {
+            query = query.eq('category', category);
+        }
+        if (subcategory) {
+            query = query.eq('subcategory', subcategory);
+        }
+
+        query = query.range(from, to);
+
+        const { data: products, count, error } = await query;
 
         if (error) {
             console.error('Error al obtener productos:', error);
             return;
         }
-        currentProducts = products;
-        renderProducts(products);
-    }
 
+        currentProducts = products;
+        totalProducts = count;
+        renderProducts(products);
+        renderPagination();
+    }
+    
     // Función para renderizar los productos en la cuadrícula
     function renderProducts(products) {
         productGrid.innerHTML = '';
@@ -123,21 +148,63 @@ document.addEventListener('DOMContentLoaded', () => {
             const category = target.dataset.category;
             const subcategory = target.dataset.subcategory;
             
-            let filteredProducts;
-            if (category === 'all') {
-                filteredProducts = currentProducts;
-            } else if (subcategory) {
-                // CORRECCIÓN: Filtrar por subcategoría sin importar la categoría padre
-                filteredProducts = currentProducts.filter(p => p.subcategory === subcategory);
+            // Si es 'all', traemos todos con paginación. Si no, usamos el filtro y sin paginación temporalmente
+            if (category === 'all' && !subcategory) {
+                currentPage = 1;
+                fetchProducts(currentPage);
             } else {
-                // CORRECCIÓN: Filtrar por categoría
-                filteredProducts = currentProducts.filter(p => p.category === category);
+                let filteredProducts;
+                if (subcategory) {
+                    filteredProducts = currentProducts.filter(p => p.subcategory === subcategory);
+                } else {
+                    filteredProducts = currentProducts.filter(p => p.category === category);
+                }
+                renderProducts(filteredProducts);
             }
-            renderProducts(filteredProducts);
+
             filterMenu.classList.remove('active');
             modalOverlay.style.display = 'none';
         }
     });
+
+    // LÓGICA DE PAGINACIÓN
+    function renderPagination() {
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        paginationContainer.innerHTML = '';
+
+        if (totalPages > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Anterior';
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => {
+                currentPage--;
+                fetchProducts(currentPage);
+            });
+            paginationContainer.appendChild(prevButton);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    fetchProducts(currentPage);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Siguiente';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                fetchProducts(currentPage);
+            });
+            paginationContainer.appendChild(nextButton);
+        }
+    }
 
     // Cargar productos al iniciar la página
     fetchProducts();
