@@ -92,6 +92,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             let imageUrls = [];
             const files = productImage.files;
+
+            // Validar la subida de imagen solo al agregar un nuevo producto
+            if (!isEditing && files.length === 0) {
+                alert('Por favor, sube al menos una imagen.');
+                return;
+            }
+
+            // Subir nuevas imágenes si se seleccionaron
             if (files.length > 0) {
                 for (const file of files) {
                     const filePath = `products/${Date.now()}-${file.name}`;
@@ -112,11 +120,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 description: productDescription.value,
                 price: parseFloat(productPrice.value),
                 category: productCategory.value,
-                subcategory: productSubcategory.value || null,
+                subcategory: productCategory.value === 'Cocina' ? productSubcategory.value : null,
                 stock: productStock.checked,
             };
 
             if (isEditing) {
+                // Si hay nuevas imágenes, se actualizan. Si no, se mantienen las existentes.
                 if (imageUrls.length > 0) {
                     productData.image_url = imageUrls;
                 }
@@ -134,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     window.location.href = 'mis_productos.html';
                 }
             } else {
+                // Al agregar, siempre se suben las imágenes
                 productData.image_url = imageUrls;
 
                 const { error } = await supabase
