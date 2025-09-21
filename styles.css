@@ -362,7 +362,7 @@ h2 {
 
 /* Estilos de la barra de navegación lateral */
 .admin-sidebar {
-    background-color: #4b3e34;
+    background-color: #d8c3b5; /* Un tono más claro y suave */
     width: 200px;
     min-height: calc(100vh - 78px);
     padding: 20px 0;
@@ -376,19 +376,21 @@ h2 {
 }
 
 .admin-sidebar .nav-link {
-    color: white;
+    color: #4b3e34; /* Color de texto más oscuro para contrastar con el fondo claro */
     text-decoration: none;
     padding: 12px 20px;
     font-weight: 500;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .admin-sidebar .nav-link:hover {
-    background-color: #e6b8a2;
+    background-color: #e6b8a2; /* Un tono un poco más oscuro al pasar el ratón */
+    color: white; /* Texto blanco al hacer hover para mejor contraste */
 }
 
 .admin-sidebar .nav-link.active {
-    background-color: #e6b8a2;
+    background-color: #e6b8a2; /* Mismo color que el hover para indicar activo */
+    color: white; /* Texto blanco para el enlace activo */
     font-weight: bold;
 }
 
