@@ -4,8 +4,6 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
     const productForm = document.getElementById('product-form');
-    const formTitle = document.getElementById('form-title');
-    const productId = document.getElementById('product-id');
     const productName = document.getElementById('product-name');
     const productDescription = document.getElementById('product-description');
     const productPrice = document.getElementById('product-price');
@@ -14,11 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const productSubcategory = document.getElementById('product-subcategory');
     const subcategoryGroup = document.getElementById('subcategory-group');
     const productStock = document.getElementById('product-stock');
-    const submitBtn = document.getElementById('submit-btn');
-    const productList = document.getElementById('product-list');
     const logoutBtn = document.getElementById('logout-btn');
-    const searchInput = document.getElementById('search-input'); // Nuevo elemento
-    let allProducts = []; // Almacena todos los productos para el filtro
+    const formTitle = document.getElementById('form-title');
+    const productId = document.getElementById('product-id');
+    const submitBtn = document.getElementById('submit-btn');
 
     productCategory.addEventListener('change', () => {
         if (productCategory.value === 'Cocina') {
@@ -35,82 +32,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    async function fetchProducts() {
-        const { data: products, error } = await supabase
+    async function loadProductForEdit() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productIdToEdit = urlParams.get('edit');
+
+        if (!productIdToEdit) return;
+
+        const { data: product, error } = await supabase
             .from('products')
-            .select('*');
+            .select('*')
+            .eq('id', productIdToEdit)
+            .single();
 
         if (error) {
-            console.error('Error al obtener productos:', error);
+            console.error('Error al cargar el producto para editar:', error);
             return;
         }
 
-        allProducts = products; // Almacenar todos los productos
-        renderProducts(allProducts);
-    }
+        productId.value = product.id;
+        productName.value = product.name;
+        productDescription.value = product.description;
+        productPrice.value = product.price;
+        productCategory.value = product.category;
+        productStock.checked = product.stock;
 
-    // MODIFICADO: FUNCIÓN PARA RENDERIZAR LOS PRODUCTOS COMO UNA TABLA
-    function renderProducts(products) {
-        if (products.length === 0) {
-            productList.innerHTML = '<p>No se encontraron productos.</p>';
-            return;
+        const selectedCategory = product.category;
+        if (selectedCategory === 'Cocina') {
+            subcategoryGroup.style.display = 'block';
+            productSubcategory.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+            ['Organizadores', 'Vajillas', 'Jarras/Botellas'].forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.textContent = sub;
+                productSubcategory.appendChild(option);
+            });
+            if (product.subcategory) {
+                productSubcategory.value = product.subcategory;
+            }
+        } else {
+            subcategoryGroup.style.display = 'none';
         }
 
-        // Crear la estructura de la tabla
-        let tableHTML = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Subcategoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        // Agregar cada producto como una fila de la tabla
-        products.forEach(product => {
-            const subcategoryDisplay = product.subcategory ? product.subcategory : '-';
-            const stockDisplay = product.stock ? 'Sí' : 'No';
-            
-            tableHTML += `
-                <tr data-id="${product.id}">
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>${subcategoryDisplay}</td>
-                    <td>$${product.price}</td>
-                    <td>${stockDisplay}</td>
-                    <td>
-                        <button class="toggle-stock-btn" data-id="${product.id}">
-                            ${product.stock ? 'Quitar' : 'Agregar'}
-                        </button>
-                        <button class="edit-btn" data-id="${product.id}">Editar</button>
-                        <button class="delete-btn" data-id="${product.id}">Eliminar</button>
-                    </td>
-                </tr>
-            `;
-        });
-        
-        tableHTML += `
-                </tbody>
-            </table>
-        `;
-        productList.innerHTML = tableHTML;
-
-        // Volver a adjuntar los event listeners a los botones recién creados
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', loadProductForEdit);
-        });
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', deleteProduct);
-        });
-        document.querySelectorAll('.toggle-stock-btn').forEach(button => {
-            button.addEventListener('click', toggleProductStock);
-        });
+        formTitle.textContent = 'Editar Producto';
+        submitBtn.textContent = 'Guardar Cambios';
     }
 
     productForm.addEventListener('submit', async (e) => {
@@ -156,13 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (error) {
                 console.error('Error al actualizar el producto:', error);
+                alert('Error al actualizar el producto.');
             } else {
-                productForm.reset();
-                productId.value = '';
-                formTitle.textContent = 'Agregar Nuevo Producto';
-                submitBtn.textContent = 'Agregar Producto';
-                subcategoryGroup.style.display = 'none';
-                fetchProducts();
+                alert('Producto actualizado con éxito!');
+                window.location.href = 'mis_productos.html'; // Redirigir a la nueva página
             }
         } else {
             productData.image_url = imageUrls;
@@ -173,97 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (error) {
                 console.error('Error al agregar el producto:', error);
+                alert('Error al agregar el producto.');
             } else {
+                alert('¡Producto agregado con éxito!');
                 productForm.reset();
                 subcategoryGroup.style.display = 'none';
-                fetchProducts();
             }
         }
     });
-
-    async function loadProductForEdit(e) {
-        const productIdToEdit = e.target.dataset.id;
-        const { data: product, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('id', productIdToEdit)
-            .single();
-        
-        if (error) {
-            console.error('Error al cargar el producto para editar:', error);
-            return;
-        }
-
-        productId.value = product.id;
-        productName.value = product.name;
-        productDescription.value = product.description;
-        productPrice.value = product.price;
-        productCategory.value = product.category;
-        productStock.checked = product.stock;
-
-        const selectedCategory = product.category;
-        if (selectedCategory === 'Cocina') {
-            subcategoryGroup.style.display = 'block';
-            productSubcategory.innerHTML = '<option value="">Selecciona una subcategoría</option>';
-            ['Organizadores', 'Vajillas', 'Jarras/Botellas'].forEach(sub => {
-                const option = document.createElement('option');
-                option.value = sub;
-                option.textContent = sub;
-                productSubcategory.appendChild(option);
-            });
-            if (product.subcategory) {
-                productSubcategory.value = product.subcategory;
-            }
-        } else {
-            subcategoryGroup.style.display = 'none';
-        }
-
-        formTitle.textContent = 'Editar Producto';
-        submitBtn.textContent = 'Guardar Cambios';
-    }
-
-    async function deleteProduct(e) {
-        const productIdToDelete = e.target.dataset.id;
-        const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este producto?');
-        if (confirmDelete) {
-            const { error } = await supabase
-                .from('products')
-                .delete()
-                .eq('id', productIdToDelete);
-            
-            if (error) {
-                console.error('Error al eliminar el producto:', error);
-            } else {
-                fetchProducts();
-            }
-        }
-    }
-
-    async function toggleProductStock(e) {
-        const productIdToToggle = e.target.dataset.id;
-        const { data: product, error } = await supabase
-            .from('products')
-            .select('stock')
-            .eq('id', productIdToToggle)
-            .single();
-
-        if (error) {
-            console.error('Error al obtener el stock:', error);
-            return;
-        }
-
-        const newStockStatus = !product.stock;
-        const { error: updateError } = await supabase
-            .from('products')
-            .update({ stock: newStockStatus })
-            .eq('id', productIdToToggle);
-
-        if (updateError) {
-            console.error('Error al actualizar el stock:', updateError);
-        } else {
-            fetchProducts();
-        }
-    }
 
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
@@ -276,13 +154,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filteredProducts = allProducts.filter(product => 
-            product.name.toLowerCase().includes(searchTerm)
-        );
-        renderProducts(filteredProducts);
-    });
-
-    fetchProducts();
+    loadProductForEdit();
 });

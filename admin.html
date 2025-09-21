@@ -11,6 +11,10 @@
 
     <header class="admin-header">
         <h1>Panel de Administración</h1>
+        <nav class="admin-nav">
+            <a href="admin.html" class="nav-link active">Agregar Producto</a>
+            <a href="mis_productos.html" class="nav-link">Mis Productos</a>
+        </nav>
         <button id="logout-btn" class="logout-btn">Cerrar Sesión</button>
     </header>
 
@@ -62,15 +66,6 @@
                 
                 <button type="submit" id="submit-btn">Agregar Producto</button>
             </form>
-        </section>
-        
-        <section class="admin-section my-products-section">
-            <h2 style="text-align: center;">Mis Productos</h2>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar por nombre...">
-            </div>
-            <div id="product-list" class="product-list">
-                </div>
         </section>
 
     </main>
