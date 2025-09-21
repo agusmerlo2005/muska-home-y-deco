@@ -362,7 +362,7 @@ h2 {
 
 /* Estilos de la barra de navegación lateral */
 .admin-sidebar {
-    background-color: #d8c3b5; /* Un tono más claro y suave */
+    background-color: #d8c3b5;
     width: 200px;
     min-height: calc(100vh - 78px);
     padding: 20px 0;
@@ -376,7 +376,7 @@ h2 {
 }
 
 .admin-sidebar .nav-link {
-    color: #4b3e34; /* Color de texto más oscuro para contrastar con el fondo claro */
+    color: #4b3e34;
     text-decoration: none;
     padding: 12px 20px;
     font-weight: 500;
@@ -384,13 +384,13 @@ h2 {
 }
 
 .admin-sidebar .nav-link:hover {
-    background-color: #e6b8a2; /* Un tono un poco más oscuro al pasar el ratón */
-    color: white; /* Texto blanco al hacer hover para mejor contraste */
+    background-color: #e6b8a2;
+    color: white;
 }
 
 .admin-sidebar .nav-link.active {
-    background-color: #e6b8a2; /* Mismo color que el hover para indicar activo */
-    color: white; /* Texto blanco para el enlace activo */
+    background-color: #e6b8a2;
+    color: white;
     font-weight: bold;
 }
 
@@ -729,5 +729,88 @@ h2 {
     .modal-main-image {
         max-width: 95%;
         max-height: 85vh;
+    }
+}
+
+/* --- ADAPTACIÓN RESPONSIVA PARA EL ADMINISTRADOR --- */
+@media (max-width: 768px) {
+    /* Oculta la barra lateral y ajusta el contenido principal */
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: -200px; /* Oculta el menú a la izquierda */
+        min-height: 100vh;
+        z-index: 101;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    }
+    
+    /* Muestra la barra lateral cuando está activa */
+    .admin-sidebar.active {
+        left: 0;
+    }
+    
+    /* Ajusta el margen del contenido principal a 0 para que no deje espacio para la barra lateral */
+    .content-wrapper {
+        margin-left: 0;
+        padding-top: 20px;
+    }
+    
+    /* Crea un botón de hamburguesa para móviles */
+    .hamburger-admin-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        position: absolute;
+        left: 20px;
+        top: 25px;
+        z-index: 102;
+    }
+    
+    .hamburger-admin-btn .bar {
+        width: 100%;
+        height: 3px;
+        background-color: #4b3e34;
+        transition: all 0.3s ease;
+    }
+    
+    .hamburger-admin-btn.active .bar:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    
+    .hamburger-admin-btn.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger-admin-btn.active .bar:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+    
+    /* Ajusta el encabezado del administrador */
+    .admin-header {
+        justify-content: flex-end; /* Alinea el botón de cerrar sesión a la derecha */
+        padding-left: 70px; /* Deja espacio para el botón de hamburguesa */
+    }
+    
+    /* Superposición de fondo para cuando el menú está abierto */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+    }
+    
+    .overlay.active {
+        display: block;
     }
 }

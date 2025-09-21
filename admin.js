@@ -156,3 +156,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadProductForEdit();
 });
+
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const adminSidebar = document.getElementById('admin-sidebar');
+const overlay = document.getElementById('overlay');
+
+if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', () => {
+        adminSidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        hamburgerBtn.classList.toggle('active');
+    });
+}
+
+if (overlay) {
+    overlay.addEventListener('click', () => {
+        adminSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburgerBtn.classList.remove('active');
+    });
+}

@@ -10,15 +10,22 @@
 <body>
 
     <header class="admin-header">
+        <button class="hamburger-admin-btn" id="hamburger-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
         <h1>Panel de Administración</h1>
         <button id="logout-btn" class="logout-btn">Cerrar Sesión</button>
     </header>
 
-    <nav class="admin-sidebar">
+    <nav class="admin-sidebar" id="admin-sidebar">
         <a href="admin.html" class="nav-link active">Agregar Producto</a>
         <a href="mis_productos.html" class="nav-link">Mis Productos</a>
     </nav>
-    
+
+    <div class="overlay" id="overlay"></div>
+
     <main class="content-wrapper">
         <section class="admin-section">
             <h2 id="form-title" style="text-align: center;">Agregar Nuevo Producto</h2>
@@ -40,7 +47,7 @@
                     <label for="product-image">Subir Imágenes</label>
                     <input type="file" id="product-image" multiple accept="image/*" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="product-category">Categoría Principal</label>
                     <select id="product-category" required>
@@ -63,12 +70,13 @@
                     <label for="product-stock">Stock</label>
                     <input type="checkbox" id="product-stock" checked>
                 </div>
-                
+
                 <button type="submit" id="submit-btn">Agregar Producto</button>
             </form>
         </section>
     </main>
 
     <script src="admin.js"></script>
+
 </body>
 </html>
