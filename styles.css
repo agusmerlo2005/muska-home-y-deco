@@ -610,3 +610,27 @@ h2 {
         max-height: 85vh;
     }
 }
+
+/* --- Nuevos estilos para la navegación del administrador --- */
+.admin-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-nav .nav-link {
+    background-color: #4b3e34;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background-color: #6a574b;
+}
+
+.admin-nav .nav-link.active {
+    background-color: #e6b8a2;
+}
