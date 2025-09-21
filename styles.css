@@ -634,3 +634,76 @@ h2 {
 .admin-nav .nav-link.active {
     background-color: #e6b8a2;
 }
+
+/* --- Estilos para la tabla de Mis Productos --- */
+.admin-section table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; /* Esto es para que el borde redondeado se aplique a los encabezados */
+}
+
+.admin-section th, .admin-section td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.admin-section th {
+    background-color: #f7f3f0;
+    font-weight: bold;
+    color: #4b3e34;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-section tr:hover {
+    background-color: #fdfaf8;
+}
+
+/* Estilos de los botones de acción para que coincidan con la estética */
+.product-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap; /* Permite que los botones se envuelvan si no hay suficiente espacio */
+}
+
+.product-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.product-actions .toggle-stock-btn {
+    background-color: #e6b8a2;
+    color: white;
+}
+
+.product-actions .toggle-stock-btn:hover {
+    background-color: #d1a896;
+}
+
+.product-actions .edit-btn {
+    background-color: #4b3e34;
+    color: white;
+}
+
+.product-actions .edit-btn:hover {
+    background-color: #6a574b;
+}
+
+.product-actions .delete-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.product-actions .delete-btn:hover {
+    background-color: #c9302c;
+}

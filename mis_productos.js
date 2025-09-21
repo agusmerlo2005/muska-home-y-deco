@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const stockDisplay = product.stock ? 'Sí' : 'No';
             
             tableHTML += `
-                <tr data-id="${product.id}">
+                <tr data-id="${product.id}" class="product-row">
                     <td>${product.name}</td>
                     <td>${product.category}</td>
                     <td>${subcategoryDisplay}</td>
                     <td>$${product.price}</td>
                     <td>${stockDisplay}</td>
-                    <td>
+                    <td class="product-actions">
                         <button class="toggle-stock-btn" data-id="${product.id}">
                             ${product.stock ? 'Quitar' : 'Agregar'}
                         </button>
@@ -99,7 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error) {
                 console.error('Error al eliminar el producto:', error);
             } else {
-                fetchProducts();
+                // Elimina la fila del DOM sin recargar la página
+                e.target.closest('.product-row').remove();
+                alert('Producto eliminado con éxito.');
             }
         }
     }
@@ -126,7 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (updateError) {
             console.error('Error al actualizar el stock:', updateError);
         } else {
-            fetchProducts();
+            // Encuentra la fila y actualiza el estado y el texto del botón
+            const row = e.target.closest('.product-row');
+            const stockCell = row.querySelector('td:nth-child(5)');
+            
+            if (newStockStatus) {
+                stockCell.textContent = 'Sí';
+                e.target.textContent = 'Quitar';
+            } else {
+                stockCell.textContent = 'No';
+                e.target.textContent = 'Agregar';
+            }
         }
     }
 
