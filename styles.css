@@ -195,7 +195,7 @@ h2 {
 .product-image {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Esta es la propiedad correcta para que no se corte */
+    object-fit: contain;
     display: block;
 }
 
@@ -290,7 +290,7 @@ h2 {
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     animation: zoomIn 0.3s ease-in-out;
-    object-fit: contain; /* Esta propiedad hace que la imagen se vea completa */
+    object-fit: contain;
 }
 
 @keyframes zoomIn {
@@ -333,7 +333,95 @@ h2 {
 }
 
 /* --- ESTILOS DEL ADMINISTRADOR --- */
-/* NOTA: Estos estilos deberían estar en admin.css si separas la administración */
+
+/* Contenedor principal para el panel de administración */
+.admin-page-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Encabezado del administrador (se mantiene arriba) */
+.admin-header {
+    background-color: #f7f3f0;
+    color: #4b3e34;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Estilos de la barra de navegación lateral */
+.admin-sidebar {
+    background-color: #4b3e34;
+    width: 200px;
+    min-height: calc(100vh - 78px);
+    padding: 20px 0;
+    position: fixed;
+    top: 78px;
+    left: 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-sidebar .nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover {
+    background-color: #e6b8a2;
+}
+
+.admin-sidebar .nav-link.active {
+    background-color: #e6b8a2;
+    font-weight: bold;
+}
+
+/* Contenedor para el contenido principal (el formulario o la tabla) */
+.content-wrapper {
+    margin-left: 200px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.logout-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+.admin-section {
+    background-color: #f7f7f7;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+/* Estilos del formulario de agregar/editar productos */
 .admin-form {
     background-color: #ffffff;
     padding: 30px;
@@ -386,60 +474,91 @@ h2 {
     background-color: #d1a896;
 }
 
-.admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ddd;
+/* --- Estilos para la tabla de Mis Productos --- */
+.search-container {
     margin-bottom: 20px;
 }
 
-.logout-btn {
-    background-color: #ff6347;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-    background-color: #d84333;
-}
-
-.admin-section {
-    background-color: #f7f7f7;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-}
-
-.product-list {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-}
-
-.product-item {
-    background-color: #ffffff;
+.search-container input {
+    width: 100%;
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.product-item img {
-    max-width: 100%;
-    height: auto;
     border-radius: 5px;
+    font-size: 1rem;
 }
 
-/* --- Estilos del botón de contacto --- */
+.admin-section table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.admin-section th, .admin-section td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.admin-section th {
+    background-color: #f7f3f0;
+    font-weight: bold;
+    color: #4b3e34;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-section tr:hover {
+    background-color: #fdfaf8;
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.product-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.product-actions .toggle-stock-btn {
+    background-color: #e6b8a2;
+    color: white;
+}
+
+.product-actions .toggle-stock-btn:hover {
+    background-color: #d1a896;
+}
+
+.product-actions .edit-btn {
+    background-color: #4b3e34;
+    color: white;
+}
+
+.product-actions .edit-btn:hover {
+    background-color: #6a574b;
+}
+
+.product-actions .delete-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.product-actions .delete-btn:hover {
+    background-color: #c9302c;
+}
+
+/* --- ESTILOS DEL BOTÓN DE CONTACTO --- */
 .contact-section {
     text-align: center;
     padding: 60px 20px;
@@ -609,101 +728,4 @@ h2 {
         max-width: 95%;
         max-height: 85vh;
     }
-}
-
-/* --- Nuevos estilos para la navegación del administrador --- */
-.admin-nav {
-    display: flex;
-    gap: 10px;
-}
-
-.admin-nav .nav-link {
-    background-color: #4b3e34;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.admin-nav .nav-link:hover {
-    background-color: #6a574b;
-}
-
-.admin-nav .nav-link.active {
-    background-color: #e6b8a2;
-}
-
-/* --- Estilos para la tabla de Mis Productos --- */
-.admin-section table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    overflow: hidden; /* Esto es para que el borde redondeado se aplique a los encabezados */
-}
-
-.admin-section th, .admin-section td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 0.95rem;
-}
-
-.admin-section th {
-    background-color: #f7f3f0;
-    font-weight: bold;
-    color: #4b3e34;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.admin-section tr:hover {
-    background-color: #fdfaf8;
-}
-
-/* Estilos de los botones de acción para que coincidan con la estética */
-.product-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap; /* Permite que los botones se envuelvan si no hay suficiente espacio */
-}
-
-.product-actions button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 0.9rem;
-}
-
-.product-actions .toggle-stock-btn {
-    background-color: #e6b8a2;
-    color: white;
-}
-
-.product-actions .toggle-stock-btn:hover {
-    background-color: #d1a896;
-}
-
-.product-actions .edit-btn {
-    background-color: #4b3e34;
-    color: white;
-}
-
-.product-actions .edit-btn:hover {
-    background-color: #6a574b;
-}
-
-.product-actions .delete-btn {
-    background-color: #d9534f;
-    color: white;
-}
-
-.product-actions .delete-btn:hover {
-    background-color: #c9302c;
 }
