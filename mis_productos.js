@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             tableHTML += `
                 <tr data-id="${product.id}" class="product-row">
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>${subcategoryDisplay}</td>
-                    <td>$${product.price}</td>
-                    <td>${stockDisplay}</td>
-                    <td class="product-actions">
+                    <td data-label="Nombre">${product.name}</td>
+                    <td data-label="Categoría">${product.category}</td>
+                    <td data-label="Subcategoría">${subcategoryDisplay}</td>
+                    <td data-label="Precio">$${product.price}</td>
+                    <td data-label="Stock">${stockDisplay}</td>
+                    <td data-label="Acciones" class="product-actions">
                         <button class="toggle-stock-btn" data-id="${product.id}">
                             ${product.stock ? 'Quitar' : 'Agregar'}
                         </button>
@@ -99,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error) {
                 console.error('Error al eliminar el producto:', error);
             } else {
-                // Elimina la fila del DOM sin recargar la página
                 e.target.closest('.product-row').remove();
                 alert('Producto eliminado con éxito.');
             }
@@ -128,9 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (updateError) {
             console.error('Error al actualizar el stock:', updateError);
         } else {
-            // Encuentra la fila y actualiza el estado y el texto del botón
             const row = e.target.closest('.product-row');
-            const stockCell = row.querySelector('td:nth-child(5)');
+            const stockCell = row.querySelector('td[data-label="Stock"]');
             
             if (newStockStatus) {
                 stockCell.textContent = 'Sí';

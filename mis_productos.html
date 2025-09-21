@@ -10,26 +10,46 @@
 <body>
 
     <header class="admin-header">
+        <button class="hamburger-admin-btn" id="hamburger-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
         <h1>Panel de Administración</h1>
         <button id="logout-btn" class="logout-btn">Cerrar Sesión</button>
     </header>
-    
-    <nav class="admin-sidebar">
+
+    <nav class="admin-sidebar" id="admin-sidebar">
         <a href="admin.html" class="nav-link">Agregar Producto</a>
         <a href="mis_productos.html" class="nav-link active">Mis Productos</a>
     </nav>
+    
+    <div class="overlay" id="overlay"></div>
 
     <main class="content-wrapper">
-        <section class="admin-section my-products-section">
-            <h2 style="text-align: center;">Mis Productos</h2>
+        <section class="admin-section">
+            <h2>Mis Productos</h2>
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Buscar por nombre...">
             </div>
-            <div id="product-list" class="product-list">
-                </div>
+            <table id="products-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Subcategoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
         </section>
     </main>
 
     <script src="mis_productos.js"></script>
+
 </body>
 </html>
