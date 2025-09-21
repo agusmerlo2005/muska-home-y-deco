@@ -3,7 +3,8 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const productList = document.getElementById('product-list');
+    // Cambio 1: Ahora se selecciona la tabla completa
+    const productsTable = document.getElementById('products-table'); 
     const searchInput = document.getElementById('search-input');
     const logoutBtn = document.getElementById('logout-btn');
     let allProducts = [];
@@ -23,53 +24,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderProducts(products) {
+        // Cambio 2: Limpiamos solo el cuerpo de la tabla y lo llenamos de nuevo
+        const tableBody = productsTable.querySelector('tbody');
+        tableBody.innerHTML = ''; 
+
         if (products.length === 0) {
-            productList.innerHTML = '<p>No se encontraron productos.</p>';
+            tableBody.innerHTML = '<tr><td colspan="6">No se encontraron productos.</td></tr>';
             return;
         }
-
-        let tableHTML = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Subcategoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
+        
         products.forEach(product => {
             const subcategoryDisplay = product.subcategory ? product.subcategory : '-';
             const stockDisplay = product.stock ? 'Sí' : 'No';
             
-            tableHTML += `
-                <tr data-id="${product.id}" class="product-row">
-                    <td data-label="Nombre">${product.name}</td>
-                    <td data-label="Categoría">${product.category}</td>
-                    <td data-label="Subcategoría">${subcategoryDisplay}</td>
-                    <td data-label="Precio">$${product.price}</td>
-                    <td data-label="Stock">${stockDisplay}</td>
-                    <td data-label="Acciones" class="product-actions">
-                        <button class="toggle-stock-btn" data-id="${product.id}">
-                            ${product.stock ? 'Quitar' : 'Agregar'}
-                        </button>
-                        <button class="edit-btn" data-id="${product.id}">Editar</button>
-                        <button class="delete-btn" data-id="${product.id}">Eliminar</button>
-                    </td>
-                </tr>
+            const tr = document.createElement('tr');
+            tr.dataset.id = product.id;
+            tr.classList.add('product-row');
+            tr.innerHTML = `
+                <td data-label="Nombre">${product.name}</td>
+                <td data-label="Categoría">${product.category}</td>
+                <td data-label="Subcategoría">${subcategoryDisplay}</td>
+                <td data-label="Precio">$${product.price}</td>
+                <td data-label="Stock">${stockDisplay}</td>
+                <td data-label="Acciones" class="product-actions">
+                    <button class="toggle-stock-btn" data-id="${product.id}">
+                        ${product.stock ? 'Quitar' : 'Agregar'}
+                    </button>
+                    <button class="edit-btn" data-id="${product.id}">Editar</button>
+                    <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+                </td>
             `;
+            tableBody.appendChild(tr);
         });
-        
-        tableHTML += `
-                </tbody>
-            </table>
-        `;
-        productList.innerHTML = tableHTML;
 
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', loadProductForEdit);
@@ -181,3 +167,5 @@ if (overlay) {
         hamburgerBtn.classList.remove('active');
     });
 }
+
+/**Con estos cambios, tu página de "Mis Productos" debería volver a funcionar y mostrar la tabla apilada correctamente en tu celular.**/
