@@ -10,6 +10,14 @@ body {
     overflow-x: hidden;
 }
 
+h2, .contact-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4b3e34;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
 /* --- ESTILOS DEL ENCABEZADO (HEADER) --- */
 .header {
     display: flex;
@@ -121,24 +129,43 @@ body {
     }
 }
 
-/* --- Responsive design para pantallas más pequeñas del Header --- */
-@media (max-width: 768px) {
-    .hero-text {
-        font-size: 2.5rem;
-    }
-    .header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
-    }
-    .header-right {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .nav-links {
-        flex-direction: column;
-        gap: 5px;
-    }
+/* --- ESTILOS DE LA PÁGINA DE CONTACTO --- */
+.contact-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.contact-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.contact-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    background-color: #e6b8a2;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    width: 250px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.contact-button:hover {
+    background-color: #d1a896;
+    transform: translateY(-2px);
+}
+
+.social-button {
+    background-color: #4b3e34;
+}
+
+.social-button:hover {
+    background-color: #6a574b;
 }
 
 /* --- ESTILOS DEL CATÁLOGO --- */
@@ -146,14 +173,6 @@ body {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
-}
-
-h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #4b3e34;
-    text-align: center;
-    margin-bottom: 30px;
 }
 
 .product-grid {
@@ -191,7 +210,6 @@ h2 {
     overflow: hidden;
 }
 
-/* --- SOLUCIÓN PARA LA IMAGEN EN EL CATÁLOGO --- */
 .product-image {
     max-width: 100%;
     max-height: 100%;
@@ -244,7 +262,7 @@ h2 {
     filter: grayscale(30%);
 }
 
-/* --- ESTILOS PARA LA GALERÍA DE IMÁGENES (MODAL) --- */
+/* --- ESTILOS DE LA GALERÍA DE IMÁGENES (MODAL) --- */
 .image-modal {
     display: none;
     position: fixed;
@@ -283,7 +301,6 @@ h2 {
     height: 100%;
 }
 
-/* --- SOLUCIÓN PARA LA IMAGEN EN EL MODAL --- */
 .modal-main-image {
     max-width: 90%;
     max-height: 90vh;
@@ -294,13 +311,14 @@ h2 {
 }
 
 @keyframes zoomIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .modal-nav {
@@ -333,14 +351,11 @@ h2 {
 }
 
 /* --- ESTILOS DEL ADMINISTRADOR --- */
-
-/* Contenedor principal para el panel de administración */
 .admin-page-layout {
     display: flex;
     min-height: 100vh;
 }
 
-/* Encabezado del administrador (se mantiene arriba) */
 .admin-header {
     background-color: #f7f3f0;
     color: #4b3e34;
@@ -360,7 +375,6 @@ h2 {
     font-size: 1.5rem;
 }
 
-/* Estilos de la barra de navegación lateral */
 .admin-sidebar {
     background-color: #d8c3b5;
     width: 200px;
@@ -394,7 +408,6 @@ h2 {
     font-weight: bold;
 }
 
-/* Contenedor para el contenido principal (el formulario o la tabla) */
 .content-wrapper {
     margin-left: 200px;
     padding: 20px;
@@ -423,7 +436,6 @@ h2 {
     box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
-/* Estilos del formulario de agregar/editar productos */
 .admin-form {
     background-color: #ffffff;
     padding: 30px;
@@ -560,26 +572,64 @@ h2 {
     background-color: #c9302c;
 }
 
-/* --- ESTILOS DEL BOTÓN DE CONTACTO --- */
-.contact-section {
-    text-align: center;
-    padding: 60px 20px;
+/* --- ESTILOS DE LA PÁGINA DE INICIO DE SESIÓN --- */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f3f0;
 }
 
-.contact-button {
-    display: inline-block;
-    padding: 15px 30px;
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-container h2 {
+    color: #4b3e34;
+    margin-bottom: 25px;
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
     background-color: #e6b8a2;
     color: white;
-    text-decoration: none;
+    border: none;
+    border-radius: 5px;
     font-weight: bold;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.contact-button:hover {
+.login-form button:hover {
     background-color: #d1a896;
-    transform: translateY(-2px);
+}
+
+.error-message {
+    color: #d9534f;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 /* --- ESTILOS DEL FILTRO DE CATEGORÍAS (MENÚ HAMBURGUESA) --- */
@@ -700,7 +750,34 @@ h2 {
     color: #777;
 }
 
-/* Media Queries para catálogo específico */
+/* --- MEDIA QUERIES --- */
+/* General */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    .header-right {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nav-links {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .hero-text {
+        font-size: 2.5rem;
+    }
+    .contact-button {
+        width: 100%;
+    }
+    .admin-form {
+        max-width: 90%;
+    }
+}
+
+/* Catálogo */
 @media (max-width: 900px) {
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -732,9 +809,8 @@ h2 {
     }
 }
 
-/* --- ADAPTACIÓN RESPONSIVA PARA EL ADMINISTRADOR --- */
+/* Administrador */
 @media (max-width: 768px) {
-    /* Oculta la barra lateral y ajusta el contenido principal */
     .admin-sidebar {
         position: fixed;
         top: 0;
@@ -744,19 +820,13 @@ h2 {
         transition: left 0.3s ease-in-out;
         box-shadow: 2px 0 5px rgba(0,0,0,0.2);
     }
-    
-    /* Muestra la barra lateral cuando está activa */
     .admin-sidebar.active {
         left: 0;
     }
-    
-    /* Ajusta el margen del contenido principal a 0 para que no deje espacio para la barra lateral */
     .content-wrapper {
         margin-left: 0;
         padding-top: 20px;
     }
-    
-    /* Crea un botón de hamburguesa para móviles */
     .hamburger-admin-btn {
         display: flex;
         flex-direction: column;
@@ -772,33 +842,25 @@ h2 {
         top: 25px;
         z-index: 102;
     }
-    
     .hamburger-admin-btn .bar {
         width: 100%;
         height: 3px;
         background-color: #4b3e34;
         transition: all 0.3s ease;
     }
-    
     .hamburger-admin-btn.active .bar:nth-child(1) {
         transform: rotate(-45deg) translate(-5px, 6px);
     }
-    
     .hamburger-admin-btn.active .bar:nth-child(2) {
         opacity: 0;
     }
-    
     .hamburger-admin-btn.active .bar:nth-child(3) {
         transform: rotate(45deg) translate(-5px, -6px);
     }
-    
-    /* Ajusta el encabezado del administrador */
     .admin-header {
         justify-content: flex-end;
         padding-left: 70px;
     }
-    
-    /* Superposición de fondo para cuando el menú está abierto */
     .overlay {
         display: none;
         position: fixed;
@@ -809,20 +871,15 @@ h2 {
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 100;
     }
-    
     .overlay.active {
         display: block;
     }
-    
-    /* ESTILOS DE TABLA APILADA PARA MÓVILES */
     .admin-section table {
         border: 0;
     }
-
     .admin-section thead {
         display: none;
     }
-
     .admin-section tr {
         display: block;
         margin-bottom: 20px;
@@ -830,7 +887,6 @@ h2 {
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
     .admin-section td {
         display: block;
         text-align: right;
@@ -839,7 +895,6 @@ h2 {
         position: relative;
         padding-left: 50%;
     }
-
     .admin-section td::before {
         content: attr(data-label);
         position: absolute;
@@ -851,64 +906,4 @@ h2 {
         color: #555;
         text-align: left;
     }
-}
-
-/* --- ESTILOS DE LA PÁGINA DE INICIO DE SESIÓN --- */
-.login-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f7f3f0;
-}
-
-.login-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-}
-
-.login-container h2 {
-    color: #4b3e34;
-    margin-bottom: 25px;
-}
-
-.login-form .form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #e6b8a2;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-form button:hover {
-    background-color: #d1a896;
-}
-
-.error-message {
-    color: #d9534f;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
 }
