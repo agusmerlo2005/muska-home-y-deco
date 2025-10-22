@@ -23,13 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     let totalProducts = 0;
     
-    // MODIFICACIÓN 1: Obtener el contenedor ya existente en el HTML
-    const paginationContainer = document.getElementById('paginacion-dinamica'); 
-
-    // Ya no es necesario crear el div ni insertarlo. Se ha borrado el siguiente bloque:
-    // const paginationContainer = document.createElement('div');
-    // paginationContainer.classList.add('pagination-container');
-    // productGrid.parentNode.insertBefore(paginationContainer, productGrid.nextSibling);
+    // CREAR Y AGREGAR CONTENEDOR DE PAGINACIÓN AL DOM (Soluciona el problema de diseño)
+    const paginationContainer = document.createElement('div');
+    paginationContainer.classList.add('paginacion-contenedor'); // Clase CSS correcta para el estilo
+    productGrid.parentNode.insertBefore(paginationContainer, productGrid.nextSibling);
 
     // Abrir/cerrar menú en dispositivos móviles
     hamburgerBtn.addEventListener('click', () => {
@@ -176,19 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.innerHTML = '';
 
         if (totalPages > 1) {
-            // MODIFICACIÓN 2: Cambiamos de <button> a <a>
+            // Botón Anterior
             const prevButton = document.createElement('a'); 
             prevButton.textContent = 'Anterior';
-            prevButton.href = `#`; // Usamos '#' o el URL de la página anterior si lo implementas
+            prevButton.href = `#`;
+            prevButton.classList.add('anterior'); 
 
-            // Deshabilitar/Estilizar si está deshabilitado
             if (currentPage === 1) {
                 prevButton.style.opacity = 0.5;
                 prevButton.style.pointerEvents = 'none';
             }
 
             prevButton.addEventListener('click', (e) => {
-                e.preventDefault();
+                e.preventDefault(); 
                 if (currentPage > 1) {
                     currentPage--;
                     fetchProducts(currentPage);
@@ -196,30 +193,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             paginationContainer.appendChild(prevButton);
 
+            // Botones de Número de Página
             for (let i = 1; i <= totalPages; i++) {
-                // MODIFICACIÓN 3: Cambiamos de <button> a <a> y establecemos el href
                 const pageButton = document.createElement('a'); 
                 pageButton.textContent = i;
-                pageButton.href = `?page=${i}`; // Buena práctica para la URL
+                pageButton.href = `?page=${i}`;
 
                 if (i === currentPage) {
-                    // Aplicamos la clase 'activo' para los nuevos estilos CSS
-                    pageButton.classList.add('activo');
+                    pageButton.classList.add('activo'); // CLASE PARA EL ESTILO MUSKA
                 }
                 pageButton.addEventListener('click', (e) => {
-                    e.preventDefault(); // Previene la navegación completa para hacer la carga AJAX
+                    e.preventDefault(); 
                     currentPage = i;
                     fetchProducts(currentPage);
                 });
                 paginationContainer.appendChild(pageButton);
             }
 
-            // MODIFICACIÓN 4: Cambiamos de <button> a <a>
+            // Botón Siguiente
             const nextButton = document.createElement('a');
             nextButton.textContent = 'Siguiente';
             nextButton.href = `#`;
+            nextButton.classList.add('siguiente');
 
-            // Deshabilitar/Estilizar si está deshabilitado
             if (currentPage === totalPages) {
                 nextButton.style.opacity = 0.5;
                 nextButton.style.pointerEvents = 'none';
