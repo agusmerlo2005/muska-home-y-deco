@@ -53,11 +53,14 @@ h2, .contact-title {
     gap: 20px;
 }
 
+/* NOTA: ELIMINADO el ícono/link de Instagram de esta sección */
 .social-links {
     display: flex;
     gap: 15px;
+    /* Si solo queda un elemento o ninguno, estas reglas son irrelevantes, pero se mantienen por estructura */
 }
 
+/* Esta regla se mantiene, pero si no hay elementos con clase social-icon, no aplica */
 .social-icon {
     color: #555;
     font-size: 1.5rem;
@@ -794,6 +797,13 @@ h2, .contact-title {
 }
 
 /* General */
+@media (min-width: 769px) {
+    .header {
+        flex-direction: row; /* Forzar fila */
+        align-items: center; /* Forzar centrado vertical */
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
