@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalNavNext = document.querySelector('.modal-nav.next');
     const modalOverlay = document.getElementById('modal-overlay');
 
+    // Referencia al contenedor de paginación existente en el HTML
+    const paginationContainer = document.getElementById('pagination-container');
+
     let currentProducts = [];
     let currentIndex = 0;
     let currentImageUrls = [];
@@ -22,11 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemsPerPage = 10;
     let currentPage = 1;
     let totalProducts = 0;
-    
-    // CREAR Y AGREGAR CONTENEDOR DE PAGINACIÓN AL DOM
-    const paginationContainer = document.createElement('div');
-    paginationContainer.classList.add('pagination-container');
-    productGrid.parentNode.insertBefore(paginationContainer, productGrid.nextSibling);
 
     // Abrir/cerrar menú en dispositivos móviles
     hamburgerBtn.addEventListener('click', () => {
@@ -153,12 +151,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentPage = 1;
                 fetchProducts(currentPage);
             } else {
+                // Para filtrar localmente (mantiene la paginación, pero solo muestra los productos filtrados en la página actual)
+                let productsToFilter = currentProducts; 
                 let filteredProducts;
+                
                 if (subcategory) {
-                    filteredProducts = currentProducts.filter(p => p.subcategory === subcategory);
+                    filteredProducts = productsToFilter.filter(p => p.subcategory === subcategory);
                 } else {
-                    filteredProducts = currentProducts.filter(p => p.category === category);
+                    filteredProducts = productsToFilter.filter(p => p.category === category);
                 }
+                
+                // Nota: Si el filtro se aplica localmente, la paginación sigue mostrando el número total de páginas
+                // que había antes de filtrar, pero solo los productos filtrados aparecerán en la cuadrícula.
+                // Para un filtro completo, se debe llamar a fetchProducts con el filtro, pero esto requiere 
+                // reajustar la lógica de paginación para los resultados filtrados. Por ahora, mantendremos la lógica actual.
                 renderProducts(filteredProducts);
             }
 
@@ -167,42 +173,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // LÓGICA DE PAGINACIÓN
+    // LÓGICA DE PAGINACIÓN (USA <a> Y CLASE 'activo')
     function renderPagination() {
+        if (!paginationContainer) return; // Asegurarse de que existe
+        
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
         paginationContainer.innerHTML = '';
 
         if (totalPages > 1) {
-            const prevButton = document.createElement('button');
-            prevButton.textContent = 'Anterior';
-            prevButton.disabled = currentPage === 1;
-            prevButton.addEventListener('click', () => {
-                currentPage--;
-                fetchProducts(currentPage);
-            });
-            paginationContainer.appendChild(prevButton);
+            // Botón Anterior
+            const prevLink = document.createElement('a');
+            prevLink.textContent = 'Anterior';
+            prevLink.href = `#`;
+            prevLink.classList.add('anterior'); 
+            
+            if (currentPage === 1) {
+                prevLink.style.opacity = 0.5;
+                prevLink.style.pointerEvents = 'none';
+            }
 
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
+            prevLink.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                if (currentPage > 1) {
+                    currentPage--;
+                    fetchProducts(currentPage);
                 }
-                pageButton.addEventListener('click', () => {
+            });
+            paginationContainer.appendChild(prevLink);
+
+            // Botones de Número de Página
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement('a'); 
+                pageLink.textContent = i;
+                pageLink.href = `?page=${i}`;
+
+                if (i === currentPage) {
+                    pageLink.classList.add('activo'); // CLASE PARA EL ESTILO MUSKA
+                }
+                pageLink.addEventListener('click', (e) => {
+                    e.preventDefault(); 
                     currentPage = i;
                     fetchProducts(currentPage);
                 });
-                paginationContainer.appendChild(pageButton);
+                paginationContainer.appendChild(pageLink);
             }
 
-            const nextButton = document.createElement('button');
-            nextButton.textContent = 'Siguiente';
-            nextButton.disabled = currentPage === totalPages;
-            nextButton.addEventListener('click', () => {
-                currentPage++;
-                fetchProducts(currentPage);
+            // Botón Siguiente
+            const nextLink = document.createElement('a');
+            nextLink.textContent = 'Siguiente';
+            nextLink.href = `#`;
+            nextLink.classList.add('siguiente');
+
+            if (currentPage === totalPages) {
+                nextLink.style.opacity = 0.5;
+                nextLink.style.pointerEvents = 'none';
+            }
+
+            nextLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    fetchProducts(currentPage);
+                }
             });
-            paginationContainer.appendChild(nextButton);
+            paginationContainer.appendChild(nextLink);
         }
     }
 
