@@ -53,14 +53,12 @@ h2, .contact-title {
     gap: 20px;
 }
 
-/* NOTA: ELIMINADO el ícono/link de Instagram de esta sección */
+/* Redes Sociales */
 .social-links {
     display: flex;
     gap: 15px;
-    /* Si solo queda un elemento o ninguno, estas reglas son irrelevantes, pero se mantienen por estructura */
 }
 
-/* Esta regla se mantiene, pero si no hay elementos con clase social-icon, no aplica */
 .social-icon {
     color: #555;
     font-size: 1.5rem;
@@ -71,6 +69,7 @@ h2, .contact-title {
     color: #e6b8a2;
 }
 
+/* Links de Navegación */
 .nav-links {
     display: flex;
     gap: 15px;
@@ -180,6 +179,7 @@ h2, .contact-title {
     color: #333;
 }
 
+/* Botón Hamburguesa */
 .hamburger-btn {
     display: flex;
     flex-direction: column;
@@ -190,6 +190,7 @@ h2, .contact-title {
     border: none;
     cursor: pointer;
     padding: 0;
+    z-index: 10;
 }
 
 .hamburger-btn .bar {
@@ -211,6 +212,7 @@ h2, .contact-title {
     transform: rotate(45deg) translate(-5px, -6px);
 }
 
+/* Menú Lateral */
 .filter-menu {
     position: fixed;
     top: 0;
@@ -341,19 +343,19 @@ h2, .contact-title {
     width: auto;
 }
 
-.con-stock { /* Cambié in-stock por con-stock para coincidir con tu HTML/JS anterior */
+.con-stock {
     color: #4b3e34;
     background-color: #e6d7cc;
 }
 
-.sin-stock { /* Cambié out-of-stock por sin-stock para coincidir con tu HTML/JS anterior */
+.sin-stock {
     color: #925c40;
     background-color: #f7e0d1;
     opacity: 0.6;
     filter: grayscale(30%);
 }
 
-/* --- ESTILOS DE PAGINACIÓN AGREGADOS/CORREGIDOS --- */
+/* --- ESTILOS DE PAGINACIÓN --- */
 .pagination-container {
     display: flex;
     justify-content: center;
@@ -400,7 +402,6 @@ h2, .contact-title {
     opacity: 0.5 !important;
     cursor: default;
 }
-/* --- FIN ESTILOS PAGINACIÓN --- */
 
 /* --- ESTILOS DE LA GALERÍA DE IMÁGENES (MODAL) --- */
 .modal-overlay {
@@ -468,6 +469,7 @@ h2, .contact-title {
     object-fit: contain;
 }
 
+/* Navegación del Modal */
 .modal-nav {
     cursor: pointer;
     position: absolute;
@@ -563,6 +565,7 @@ h2, .contact-title {
     min-height: 100vh;
 }
 
+/* Cabecera del Admin */
 .admin-header {
     background-color: #f7f3f0;
     color: #4b3e34;
@@ -582,6 +585,21 @@ h2, .contact-title {
     font-size: 1.5rem;
 }
 
+.logout-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+/* Sidebar del Admin */
 .admin-sidebar {
     background-color: #d8c3b5;
     width: 200px;
@@ -615,24 +633,11 @@ h2, .contact-title {
     font-weight: bold;
 }
 
+/* Contenido del Admin */
 .content-wrapper {
     margin-left: 200px;
     padding: 20px;
     flex-grow: 1;
-}
-
-.logout-btn {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-    background-color: #c9302c;
 }
 
 .admin-section {
@@ -643,6 +648,7 @@ h2, .contact-title {
     box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
+/* Formularios del Admin */
 .admin-form {
     background-color: #ffffff;
     padding: 30px;
@@ -695,7 +701,7 @@ h2, .contact-title {
     background-color: #d1a896;
 }
 
-/* --- Estilos para la tabla de Mis Productos --- */
+/* Tabla de Productos del Admin */
 .search-container {
     margin-bottom: 20px;
 }
@@ -779,8 +785,7 @@ h2, .contact-title {
     background-color: #c9302c;
 }
 
-/* --- MEDIA QUERIES --- */
-/* Animaciones */
+/* --- ANIMACIONES --- */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -796,7 +801,9 @@ h2, .contact-title {
     to { transform: scale(1); opacity: 1; }
 }
 
-/* General */
+/* --- MEDIA QUERIES --- */
+
+/* 769px y más */
 @media (min-width: 769px) {
     .header {
         flex-direction: row; /* Forzar fila */
@@ -804,19 +811,27 @@ h2, .contact-title {
     }
 }
 
+/* Móvil (Max 768px) */
 @media (max-width: 768px) {
+    /* Header */
     .header {
         flex-direction: column;
-        gap: 10px;
-        padding: 10px;
+        gap: 15px;
+        padding: 15px 10px;
+    }
+    .logo-container {
+        width: 100%;
+        justify-content: center;
     }
     .header-right {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        gap: 20px;
     }
     .nav-links {
-        flex-direction: column;
-        gap: 5px;
+        flex-direction: row;
+        gap: 10px;
     }
     .hero-text {
         font-size: 2.5rem;
@@ -827,42 +842,8 @@ h2, .contact-title {
     .admin-form {
         max-width: 90%;
     }
-}
 
-/* Catálogo */
-@media (max-width: 900px) {
-    .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-    .product-grid {
-        grid-template-columns: 1fr;
-        padding: 0 10px;
-    }
-    .product-card {
-        margin: auto;
-        max-width: 300px;
-    }
-    .container {
-        padding: 10px;
-    }
-    h2 {
-        font-size: 2rem;
-    }
-    .filter-menu {
-        width: 80%;
-    }
-    .modal-main-image {
-        max-width: 95%;
-        max-height: 85vh;
-    }
-}
-
-/* Administrador */
-@media (max-width: 768px) {
+    /* Admin Sidebar / Layout */
     .admin-sidebar {
         position: fixed;
         top: 0;
@@ -926,6 +907,8 @@ h2, .contact-title {
     .overlay.active {
         display: block;
     }
+
+    /* Tablas en móvil */
     .admin-section table {
         border: 0;
     }
@@ -957,5 +940,38 @@ h2, .contact-title {
         text-transform: uppercase;
         color: #555;
         text-align: left;
+    }
+}
+
+/* Catálogo Tablet (Max 900px) */
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Catálogo Móvil Pequeño (Max 600px) */
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+    }
+    .product-card {
+        margin: auto;
+        max-width: 300px;
+    }
+    .container {
+        padding: 10px;
+    }
+    h2 {
+        font-size: 2rem;
+    }
+    .filter-menu {
+        width: 80%;
+    }
+    .modal-main-image {
+        max-width: 95%;
+        max-height: 85vh;
     }
 }
