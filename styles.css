@@ -24,6 +24,23 @@ h2, .contact-title {
     padding: 20px;
 }
 
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modal-overlay.active {
+    display: block;
+    opacity: 1;
+}
 /* --- ESTILOS DEL ENCABEZADO (HEADER) --- */
 .header {
     display: flex;
@@ -53,7 +70,6 @@ h2, .contact-title {
     gap: 20px;
 }
 
-/* Redes Sociales */
 .social-links {
     display: flex;
     gap: 15px;
@@ -69,7 +85,6 @@ h2, .contact-title {
     color: #e6b8a2;
 }
 
-/* Links de Navegación */
 .nav-links {
     display: flex;
     gap: 15px;
@@ -163,110 +178,6 @@ h2, .contact-title {
 .social-button:hover {
     background-color: #6a574b;
 }
-
-/* --- ESTILOS DEL FILTRO DE CATEGORÍAS (MENÚ HAMBURGUESA) --- */
-.filter-header {
-    display: flex;
-    align-items: center;
-    margin: 20px auto 10px auto;
-    max-width: 1200px;
-    padding: 0 20px;
-}
-
-.filter-text {
-    margin-left: 15px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* Botón Hamburguesa */
-.hamburger-btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 25px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 10;
-}
-
-.hamburger-btn .bar {
-    width: 100%;
-    height: 3px;
-    background-color: #333;
-    transition: all 0.3s ease;
-}
-
-.hamburger-btn.active .bar:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.hamburger-btn.active .bar:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger-btn.active .bar:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-}
-
-/* Menú Lateral */
-.filter-menu {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    width: 250px;
-    height: 100%;
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    transition: left 0.3s ease;
-    z-index: 100;
-    box-sizing: border-box;
-}
-
-.filter-menu.active {
-    left: 0;
-}
-
-.filter-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.filter-menu li {
-    margin-bottom: 10px;
-}
-
-.filter-menu a {
-    text-decoration: none;
-    color: #555;
-    font-size: 1.1rem;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-.filter-menu a:hover {
-    background-color: #e9e9e9;
-}
-
-.filter-menu .has-sub .submenu {
-    list-style: none;
-    padding-left: 20px;
-    margin-top: 5px;
-}
-
-.filter-menu .has-sub .submenu a {
-    font-size: 1rem;
-    padding: 8px 10px;
-    color: #777;
-}
-
 /* --- ESTILOS DEL CATÁLOGO --- */
 .product-grid {
     display: grid;
@@ -343,85 +254,19 @@ h2, .contact-title {
     width: auto;
 }
 
-.con-stock {
+.in-stock {
     color: #4b3e34;
     background-color: #e6d7cc;
 }
 
-.sin-stock {
+.out-of-stock {
     color: #925c40;
     background-color: #f7e0d1;
     opacity: 0.6;
     filter: grayscale(30%);
 }
 
-/* --- ESTILOS DE PAGINACIÓN --- */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 40px 0;
-}
-
-.pagination-container a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    text-decoration: none;
-    color: #4b3e34;
-    background-color: #ffffff;
-    border: 1px solid #d8c3b5;
-    border-radius: 5px;
-    font-weight: 500;
-    transition: background-color 0.2s, color 0.2s, transform 0.2s;
-}
-
-.pagination-container a:hover {
-    background-color: #e6b8a2;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.pagination-container a.activo {
-    background-color: #4b3e34;
-    color: white;
-    border-color: #4b3e34;
-    font-weight: bold;
-}
-
-.pagination-container a.anterior,
-.pagination-container a.siguiente {
-    width: auto;
-    padding: 0 15px;
-}
-
-.pagination-container a[style*="pointer-events: none"] {
-    opacity: 0.5 !important;
-    cursor: default;
-}
-
 /* --- ESTILOS DE LA GALERÍA DE IMÁGENES (MODAL) --- */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 99;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-}
-
-.modal-overlay.active {
-    display: block;
-    opacity: 1;
-}
-
 .image-modal {
     display: none;
     position: fixed;
@@ -469,7 +314,6 @@ h2, .contact-title {
     object-fit: contain;
 }
 
-/* Navegación del Modal */
 .modal-nav {
     cursor: pointer;
     position: absolute;
@@ -499,73 +343,111 @@ h2, .contact-title {
     background-color: rgba(0,0,0,0.8);
 }
 
-/* --- ESTILOS DE LA PÁGINA DE INICIO DE SESIÓN --- */
-.login-body {
+/* --- ESTILOS DEL FILTRO DE CATEGORÍAS (MENÚ HAMBURGUESA) --- */
+.filter-header {
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #f7f3f0;
+    margin: 20px auto 10px auto;
+    max-width: 1200px;
+    padding: 0 20px;
 }
 
-.login-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
+.filter-text {
+    margin-left: 15px;
+    font-weight: bold;
+    color: #333;
 }
 
-.login-container h2 {
-    color: #4b3e34;
-    margin-bottom: 25px;
-}
-
-.login-form .form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #e6b8a2;
-    color: white;
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
     border: none;
-    border-radius: 5px;
-    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 0;
 }
 
-.login-form button:hover {
-    background-color: #d1a896;
+.hamburger-btn .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+    transition: all 0.3s ease;
 }
 
-.error-message {
-    color: #d9534f;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
+.hamburger-btn.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
 }
 
+.hamburger-btn.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+.filter-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 250px;
+    height: 100%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.filter-menu.active {
+    left: 0;
+}
+
+.filter-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-menu li {
+    margin-bottom: 10px;
+}
+
+.filter-menu a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1.1rem;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.filter-menu a:hover {
+    background-color: #e9e9e9;
+}
+
+.filter-menu .has-sub .submenu {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.filter-menu .has-sub .submenu a {
+    font-size: 1rem;
+    padding: 8px 10px;
+    color: #777;
+}
 /* --- ESTILOS DEL ADMINISTRADOR --- */
 .admin-page-layout {
     display: flex;
     min-height: 100vh;
 }
 
-/* Cabecera del Admin */
 .admin-header {
     background-color: #f7f3f0;
     color: #4b3e34;
@@ -585,21 +467,6 @@ h2, .contact-title {
     font-size: 1.5rem;
 }
 
-.logout-btn {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-    background-color: #c9302c;
-}
-
-/* Sidebar del Admin */
 .admin-sidebar {
     background-color: #d8c3b5;
     width: 200px;
@@ -633,11 +500,24 @@ h2, .contact-title {
     font-weight: bold;
 }
 
-/* Contenido del Admin */
 .content-wrapper {
     margin-left: 200px;
     padding: 20px;
     flex-grow: 1;
+}
+
+.logout-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
 }
 
 .admin-section {
@@ -648,7 +528,6 @@ h2, .contact-title {
     box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
-/* Formularios del Admin */
 .admin-form {
     background-color: #ffffff;
     padding: 30px;
@@ -701,7 +580,7 @@ h2, .contact-title {
     background-color: #d1a896;
 }
 
-/* Tabla de Productos del Admin */
+/* --- Estilos para la tabla de Mis Productos --- */
 .search-container {
     margin-bottom: 20px;
 }
@@ -784,8 +663,67 @@ h2, .contact-title {
 .product-actions .delete-btn:hover {
     background-color: #c9302c;
 }
+/* --- ESTILOS DE LA PÁGINA DE INICIO DE SESIÓN --- */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f3f0;
+}
 
-/* --- ANIMACIONES --- */
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-container h2 {
+    color: #4b3e34;
+    margin-bottom: 25px;
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #e6b8a2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #d1a896;
+}
+
+.error-message {
+    color: #d9534f;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+/* --- MEDIA QUERIES --- */
+/* Animaciones */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -801,37 +739,20 @@ h2, .contact-title {
     to { transform: scale(1); opacity: 1; }
 }
 
-/* --- MEDIA QUERIES --- */
-
-/* 769px y más */
-@media (min-width: 769px) {
-    .header {
-        flex-direction: row; /* Forzar fila */
-        align-items: center; /* Forzar centrado vertical */
-    }
-}
-
-/* Móvil (Max 768px) */
+/* General */
 @media (max-width: 768px) {
-    /* Header */
     .header {
         flex-direction: column;
-        gap: 15px;
-        padding: 15px 10px;
-    }
-    .logo-container {
-        width: 100%;
-        justify-content: center;
+        gap: 10px;
+        padding: 10px;
     }
     .header-right {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-        gap: 20px;
+        flex-direction: column;
+        gap: 10px;
     }
     .nav-links {
-        flex-direction: row;
-        gap: 10px;
+        flex-direction: column;
+        gap: 5px;
     }
     .hero-text {
         font-size: 2.5rem;
@@ -842,8 +763,42 @@ h2, .contact-title {
     .admin-form {
         max-width: 90%;
     }
+}
 
-    /* Admin Sidebar / Layout */
+/* Catálogo */
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+    }
+    .product-card {
+        margin: auto;
+        max-width: 300px;
+    }
+    .container {
+        padding: 10px;
+    }
+    h2 {
+        font-size: 2rem;
+    }
+    .filter-menu {
+        width: 80%;
+    }
+    .modal-main-image {
+        max-width: 95%;
+        max-height: 85vh;
+    }
+}
+
+/* Administrador */
+@media (max-width: 768px) {
     .admin-sidebar {
         position: fixed;
         top: 0;
@@ -907,8 +862,6 @@ h2, .contact-title {
     .overlay.active {
         display: block;
     }
-
-    /* Tablas en móvil */
     .admin-section table {
         border: 0;
     }
@@ -940,38 +893,5 @@ h2, .contact-title {
         text-transform: uppercase;
         color: #555;
         text-align: left;
-    }
-}
-
-/* Catálogo Tablet (Max 900px) */
-@media (max-width: 900px) {
-    .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 20px;
-    }
-}
-
-/* Catálogo Móvil Pequeño (Max 600px) */
-@media (max-width: 600px) {
-    .product-grid {
-        grid-template-columns: 1fr;
-        padding: 0 10px;
-    }
-    .product-card {
-        margin: auto;
-        max-width: 300px;
-    }
-    .container {
-        padding: 10px;
-    }
-    h2 {
-        font-size: 2rem;
-    }
-    .filter-menu {
-        width: 80%;
-    }
-    .modal-main-image {
-        max-width: 95%;
-        max-height: 85vh;
     }
 }

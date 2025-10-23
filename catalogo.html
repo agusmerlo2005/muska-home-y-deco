@@ -1,74 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSKA | Catálogo</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSKA | Catálogo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo-container">
-            <img src="img/logo.png" alt="MUSKA Logo" class="logo">
-        </div>
-        <div class="header-right">
-                        <nav class="nav-links">
-                <a href="index.html" class="catalog-link">Inicio</a>
-                <a href="catalogo.html" class="catalog-link">Catálogo</a>
-            </nav>
-        </div>
-    </header>
+    <header class="header">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="MUSKA Logo" class="logo">
+        </div>
+        <div class="header-right">
+            <div class="social-links">
+                <a href="https://www.instagram.com/muskahome" target="_blank" aria-label="Instagram de Muska">
+                    <i class="fab fa-instagram social-icon"></i>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="catalog-link">Inicio</a>
+                <a href="catalogo.html" class="catalog-link">Catálogo</a>
+            </nav>
+        </div>
+    </header>
 
-    <main class="container">
-        
-        <h2>Catálogo de Productos</h2>
-        
-        <div class="filter-header">
-            <button id="hamburger-btn" class="hamburger-btn">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-            <p class="filter-text">Filtrar por categoría</p>
-        </div>
+    <main class="container">
+        
+        <h2>Catálogo de Productos</h2>
+        
+        <div class="filter-header">
+            <button id="hamburger-btn" class="hamburger-btn">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <p class="filter-text">Filtrar por categoría</p>
+        </div>
 
-        <nav id="filter-menu" class="filter-menu">
-            <ul>
-                <li><a href="#" class="filter-link" data-category="all">Mostrar todo</a></li>
-                <li class="has-sub">
-                    <a href="#" class="filter-link" data-category="Cocina">Cocina</a>
-                    <ul class="submenu">
-                        <li><a href="#" class="filter-link" data-subcategory="Organizadores">Organizadores</a></li>
-                        <li><a href="#" class="filter-link" data-subcategory="Vajillas">Vajillas</a></li>
-                        <li><a href="#" class="filter-link" data-subcategory="Jarras/Botellas">Jarras/Botellas</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="filter-link" data-category="Baño">Baño</a></li>
-                <li><a href="#" class="filter-link" data-category="Textiles">Textiles</a></li>
-                <li><a href="#" class="filter-link" data-category="Difusores/Home Spray">Difusores/HomeSpray</a></li>
-            </ul>
-        </nav>
+        <nav id="filter-menu" class="filter-menu">
+            <ul>
+                <li><a href="#" class="filter-link" data-category="all">Mostrar todo</a></li>
+                <li class="has-sub">
+                    <a href="#" class="filter-link" data-category="Cocina">Cocina</a>
+                    <ul class="submenu">
+                        <li><a href="#" class="filter-link" data-subcategory="Organizadores">Organizadores</a></li>
+                        <li><a href="#" class="filter-link" data-subcategory="Vajillas">Vajillas</a></li>
+                        <li><a href="#" class="filter-link" data-subcategory="Jarras/Botellas">Jarras/Botellas</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="filter-link" data-category="Baño">Baño</a></li>
+                <li><a href="#" class="filter-link" data-category="Textiles">Textiles</a></li>
+                <li><a href="#" class="filter-link" data-category="Difusores/Home Spray">Difusores/HomeSpray</a></li>
+            </ul>
+        </nav>
 
-        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-overlay" id="modal-overlay"></div>
 
-        <section id="product-grid" class="product-grid">
-            </section>
-        
-                <div id="pagination-container" class="pagination-container"></div> 
+        <section id="product-grid" class="product-grid">
+            </section>
+        
+        <div class="pagination-container"></div>
 
-        <div id="image-modal" class="image-modal">
-            <span class="close-button">&times;</span>
-            <div id="modal-image-container"></div>
-            <a class="modal-nav prev">&#10094;</a>
-            <a class="modal-nav next">&#10095;</a>
-        </div>
-        
-    </main>
+        <div id="image-modal" class="image-modal">
+            <span class="close-button">&times;</span>
+            <div id="modal-image-container"></div>
+            <a class="modal-nav prev">&#10094;</a>
+            <a class="modal-nav next">&#10095;</a>
+        </div>
+        
+    </main>
 
-    <script src="catalogo.js"></script>
+    <script src="catalogo.js"></script>
 
 </body>
 </html>
