@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentImageUrls = [];
 
     // VARIABLES PARA PAGINACIÓN
-    const itemsPerPage = 10;
+    const itemsPerPage = 12; // ¡CAMBIO HECHO AQUÍ! Antes era 10.
     let currentPage = 1;
     let totalProducts = 0;
     
