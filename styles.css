@@ -895,3 +895,54 @@ h2, .contact-title {
         text-align: left;
     }
 }
+
+/* --- ESTILOS DE PAGINACIÓN (CATÁLOGO) --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    gap: 8px; /* Espacio entre botones */
+}
+
+.pagination-container button {
+    background-color: transparent; /* Fondo transparente por defecto */
+    color: #4b3e34; /* Color de texto principal de Muska */
+    border: 1px solid #e6b8a2; /* Borde con el color de acento de Muska */
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 40px; /* Ancho mínimo para los números */
+    text-align: center;
+}
+
+.pagination-container button:hover:not(:disabled):not(.active) {
+    background-color: #f7f3f0; /* Color de fondo muy suave al pasar el ratón */
+    color: #e6b8a2;
+    border-color: #e6b8a2;
+}
+
+.pagination-container button.active {
+    background-color: #e6b8a2; /* Color de fondo de acento para la página activa */
+    color: white;
+    border-color: #e6b8a2;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(230, 184, 162, 0.4); /* Sombra sutil */
+}
+
+.pagination-container button:disabled {
+    color: #ccc; /* Color para botones deshabilitados (Anterior/Siguiente) */
+    border-color: #ddd;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
+}
+
+/* Estilos específicos para botones "Anterior" y "Siguiente" */
+.pagination-container button:first-child,
+.pagination-container button:last-child {
+    font-weight: 700;
+}
